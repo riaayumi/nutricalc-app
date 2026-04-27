@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NutriCalc | Platform Perangkat Gizi Profesional</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <style>
+        body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
+        .star-rating { color: #fbbf24; }
+        .swiper-pagination-bullet-active { background: #10b981 !important; }
+        .pricing-card:hover { transform: translateY(-10px); }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <nav class="sticky top-0 z-50 flex items-center justify-between px-8 py-5 bg-white/80 backdrop-blur-md shadow-sm border-b border-slate-100">
+        <div class="text-2xl font-bold text-emerald-600 tracking-tight">NutriCalc</div>
+        <div class="space-x-8 items-center hidden md:flex">
+            <a href="#about" class="font-medium hover:text-emerald-600 transition">Tentang Kami</a>
+            <a href="#features" class="font-medium hover:text-emerald-600 transition">Manfaat</a>
+            <a href="#pricing" class="font-medium hover:text-emerald-600 transition">Harga</a>
+            <a href="#testimoni" class="font-medium hover:text-emerald-600 transition">Testimoni</a>
+            <button class="bg-emerald-600 text-white px-6 py-2 rounded-full font-semibold hover:bg-emerald-700 transition shadow-md">
+                Masuk
+            </button>
+        </div>
+    </nav>
+
+    <header class="container mx-auto px-8 py-24 flex flex-col items-center text-center">
+        <h1 class="text-4xl md:text-6xl font-bold leading-tight max-w-4xl tracking-tight">
+            Kenali Tubuhmu melalui Data Gizi yang <span class="text-emerald-600 font-extrabold">Akurat & Aman</span>
+        </h1>
+        <p class="mt-6 text-lg text-slate-600 max-w-2xl italic font-light">
+            "Platform Perangkat Gizi Profesional: Tepat, Cepat dan Akurat"
+        </p>
+        <div class="mt-10">
+            <a href="#pricing" class="bg-emerald-600 text-white px-10 py-4 rounded-2xl text-lg font-bold shadow-xl shadow-emerald-200 hover:scale-105 transition-all duration-300 inline-block">
+                Mulai Berlangganan
+            </a>
+        </div>
+    </header>
+
+    <section id="pricing" class="py-24 bg-white">
+        <div class="container mx-auto px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-slate-900 tracking-tight">Pilih Paket Profesional Anda</h2>
+                <div class="w-20 h-1.5 bg-emerald-500 mx-auto mt-4 rounded-full"></div>
+                <p class="text-slate-500 mt-6 max-w-xl mx-auto font-light">Akses eksklusif ke database gizi terlengkap di Indonesia dengan sistem keamanan tingkat tinggi.</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <div class="pricing-card p-10 border border-slate-100 rounded-[2.5rem] bg-slate-50 flex flex-col transition-all duration-500 hover:shadow-xl">
+                    <h3 class="text-xl font-bold text-slate-900 mb-2">Personal</h3>
+                    <p class="text-slate-500 text-sm mb-6">Untuk pemantauan gizi mandiri</p>
+                    <div class="mb-8">
+                        <span class="text-4xl font-extrabold text-slate-900">Rp 49rb</span>
+                        <span class="text-slate-500 text-sm">/bulan</span>
+                    </div>
+                    <ul class="space-y-4 mb-10 flex-grow text-sm text-slate-600 font-light">
+                        <li class="flex items-center"><span class="text-emerald-500 mr-2">✔</span> Kalkulator Gizi Dasar</li>
+                        <li class="flex items-center"><span class="text-emerald-500 mr-2">✔</span> Database 500+ Makanan</li>
+                        <li class="flex items-center"><span class="text-emerald-500 mr-2">✔</span> 1 Profil Pengguna</li>
+                        <li class="flex items-center text-slate-400 font-light italic"><span class="mr-2">✘</span> Grafik Progres Mingguan</li>
+                    </ul>
+                    <button class="w-full py-4 px-6 border-2 border-emerald-600 text-emerald-600 rounded-2xl font-bold hover:bg-emerald-600 hover:text-white transition-all">Pilih Personal</button>
+                </div>
+
+                <div class="pricing-card p-10 border-4 border-emerald-500 rounded-[2.5rem] bg-white flex flex-col transition-all duration-500 shadow-2xl shadow-emerald-100 relative scale-105 z-10">
+                    <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-emerald-500 text-white px-6 py-1 rounded-full text-xs font-bold uppercase tracking-widest">Paling Populer</div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-2">Professional</h3>
+                    <p class="text-slate-500 text-sm mb-6">Cocok untuk Ahli Gizi & Coach</p>
+                    <div class="mb-8">
+                        <span class="text-4xl font-extrabold text-slate-900">Rp 149rb</span>
+                        <span class="text-slate-500 text-sm">/bulan</span>
+                    </div>
+                    <ul class="space-y-4 mb-10 flex-grow text-sm text-slate-700">
+                        <li class="flex items-center font-semibold text-emerald-600"><span class="mr-2">✔</span> Full Database 4.000+ Makanan</li>
+                        <li class="flex items-center"><span class="text-emerald-500 mr-2">✔</span> Kalkulator Gizi Klinis</li>
+                        <li class="flex items-center"><span class="text-emerald-500 mr-2">✔</span> Grafik Progres & History</li>
+                        <li class="flex items-center"><span class="text-emerald-500 mr-2">✔</span> Export Laporan ke PDF</li>
+                        <li class="flex items-center"><span class="text-emerald-500 mr-2">✔</span> Dukungan Prioritas</li>
+                    </ul>
+                    <button class="w-full py-4 px-6 bg-emerald-600 text-white rounded-2xl font-bold shadow-lg shadow-emerald-200 hover:bg-emerald-700 transition-all">Pilih Professional</button>
+                </div>
+
+                <div class="pricing-card p-10 border border-slate-100 rounded-[2.5rem] bg-slate-50 flex flex-col transition-all duration-500 hover:shadow-xl">
+                    <h3 class="text-xl font-bold text-slate-900 mb-2">Enterprise</h3>
+                    <p class="text-slate-500 text-sm mb-6">Untuk Klinik & Rumah Sakit</p>
+                    <div class="mb-8">
+                        <span class="text-4xl font-extrabold text-slate-900">Hubungi</span>
+                        <span class="text-slate-500 text-sm">Kami</span>
+                    </div>
+                    <ul class="space-y-4 mb-10 flex-grow text-sm text-slate-600 font-light">
+                        <li class="flex items-center"><span class="text-emerald-500 mr-2">✔</span> Kelola Multi-Pasien</li>
+                        <li class="flex items-center"><span class="text-emerald-500 mr-2">✔</span> Custom Branding (Logo Anda)</li>
+                        <li class="flex items-center"><span class="text-emerald-500 mr-2">✔</span> API Integration</li>
+                        <li class="flex items-center"><span class="text-emerald-500 mr-2">✔</span> On-site Training</li>
+                    </ul>
+                    <button class="w-full py-4 px-6 border-2 border-slate-900 text-slate-900 rounded-2xl font-bold hover:bg-slate-900 hover:text-white transition-all">Hubungi Sales</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="testimoni" class="py-24 bg-slate-50 overflow-hidden">
+        <div class="container mx-auto px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-slate-900 tracking-tight">Apa Kata Mereka?</h2>
+                <div class="w-20 h-1.5 bg-emerald-500 mx-auto mt-4 rounded-full"></div>
+            </div>
+            <div class="swiper mySwiper pb-12">
+                <div class="swiper-wrapper" id="testimonial-wrapper"></div>
+                <div class="swiper-pagination"></div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-slate-900 text-slate-300 pt-20 pb-10">
+        <div class="container mx-auto px-8 grid md:grid-cols-4 gap-12 mb-16">
+            <div class="md:col-span-1">
+                <h3 class="text-2xl font-bold text-white mb-4">NutriCalc</h3>
+                <p class="text-sm font-light">Platform Perangkat Gizi Profesional<br>Tepat, Cepat dan Akurat</p>
+            </div>
+            <div>
+                <h4 class="text-emerald-500 font-bold mb-6 text-xs uppercase tracking-widest">Informasi</h4>
+                <ul class="space-y-3 text-sm font-light">
+                    <li><a href="#" class="hover:text-emerald-400">Kebijakan Privasi</a></li>
+                    <li><a href="#" class="hover:text-emerald-400">Syarat & Ketentuan</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-emerald-500 font-bold mb-6 text-xs uppercase tracking-widest">Dukungan</h4>
+                <ul class="space-y-3 text-sm font-light">
+                    <li><a href="#" class="hover:text-emerald-400">Pusat Bantuan</a></li>
+                    <li><a href="mailto:support@nutricalc.id" class="hover:text-emerald-400">Kontak Admin</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-emerald-500 font-bold mb-6 text-xs uppercase tracking-widest">Alamat</h4>
+                <p class="text-sm font-light">support@nutricalc.id</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script>
+        // Data Testimoni (Sama seperti sebelumnya)
+        const testimonials = [
+            { name: "Siti Aminah, S.Gz", role: "Ahli Gizi RS", text: "Sangat membantu efisiensi kerja klinis saya setiap hari!" },
+            { name: "Budi Santoso", role: "Fitness Enthusiast", text: "Database makanannya paling lengkap untuk lidah orang Indonesia." },
+            { name: "Dr. Linda", role: "Dokter Umum", text: "Privasi data pasien terjaga dengan sangat profesional di sini." },
+            { name: "Rizky Fauzi", role: "Personal Trainer", text: "Kalkulator gizi tercepat yang pernah saya gunakan untuk klien." },
+            { name: "Maya Kartika", role: "Ibu Rumah Tangga", text: "Membantu saya memantau gizi anak-anak dengan sangat akurat." },
+            { name: "Hendra Wijaya", role: "Health Coach", text: "Fitur grafiknya sangat memotivasi klien untuk disiplin." },
+            { name: "Nina", role: "Mahasiswi Gizi", text: "Alat bantu belajar yang luar biasa untuk tugas-tugas kampus." },
+            { name: "Agus Pratama", role: "Pemilik Katering", text: "NutriCalc membantu saya menghitung kalori menu katering dengan presisi." },
+            { name: "Lestari", role: "Pengguna Umum", text: "Interface-nya bersih, modern, dan sangat mudah digunakan." },
+            { name: "Doni", role: "Atlet", text: "Sangat menolong dalam menjaga performa fisik lewat asupan gizi tepat." },
+            { name: "Rina", role: "Dietitian", text: "Alur kerja asesmen hingga edukasi pasien jadi jauh lebih rapi." },
+            { name: "Yanto", role: "Pegiat Olahraga", text: "Aplikasi gizi terbaik yang pernah saya temukan sejauh ini." },
+            { name: "Siska", role: "Edukator Kesehatan", text: "Membantu menyampaikan data gizi yang rumit menjadi mudah dipahami." },
+            { name: "Kevin", role: "Software Engineer", text: "Keamanan datanya membuat saya merasa tenang menyimpan riwayat medis." },
+            { name: "Nurul", role: "Apoteker", text: "Platform yang sangat dibutuhkan untuk ekosistem kesehatan digital." }
+        ];
+
+        const wrapper = document.getElementById('testimonial-wrapper');
+        testimonials.forEach(item => {
+            const slide = document.createElement('div');
+            slide.className = 'swiper-slide';
+            slide.innerHTML = `
+                <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-100 h-full flex flex-col justify-between">
+                    <div><div class="star-rating flex mb-4 text-sm">★★★★★</div><p class="text-slate-600 italic text-sm leading-relaxed">"${item.text}"</p></div>
+                    <div class="mt-6 flex items-center">
+                        <div class="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-700 font-bold text-xs mr-3">${item.name.substring(0,2).toUpperCase()}</div>
+                        <div><h4 class="font-bold text-slate-900 text-sm">${item.name}</h4><p class="text-[10px] text-emerald-600 font-semibold uppercase tracking-wider">${item.role}</p></div>
+                    </div>
+                </div>`;
+            wrapper.appendChild(slide);
+        });
+
+        new Swiper(".mySwiper", {
+            slidesPerView: 1, spaceBetween: 20,
+            autoplay: { delay: 3000 },
+            pagination: { el: ".swiper-pagination", clickable: true },
+            breakpoints: { 640: { slidesPerView: 2 }, 1024: { slidesPerView: 3 } }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Masuk & Daftar | NutriCalc Profesional</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .hidden-form { display: none; }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen flex items-center justify-center p-6">
+
+    <div class="max-w-md w-full bg-white rounded-[2.5rem] shadow-2xl shadow-emerald-100 border border-slate-100 overflow-hidden">
+        
+        <div class="bg-emerald-600 p-8 text-center text-white">
+            <h2 class="text-2xl font-bold tracking-tight text-white">NutriCalc</h2>
+            <p id="form-subtitle" class="text-emerald-100 text-sm mt-2">Silakan masuk ke akun Anda.</p>
+        </div>
+
+        <div class="p-8">
+            <form id="login-form" class="space-y-5">
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Email</label>
+                    <input type="email" id="login-email" required placeholder="nama@email.com" class="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:outline-none focus:border-emerald-500 text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Password</label>
+                    <input type="password" id="login-password" required placeholder="••••••••" class="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:outline-none focus:border-emerald-500 text-sm">
+                </div>
+                <button type="submit" class="w-full py-4 bg-emerald-600 text-white rounded-2xl font-bold shadow-lg shadow-emerald-200 hover:bg-emerald-700 transition-all">
+                    Masuk Sekarang
+                </button>
+            </form>
+
+            <form id="register-form" class="space-y-5 hidden-form">
+                <div class="bg-emerald-50 border border-emerald-100 p-4 rounded-2xl mb-6 flex items-center">
+                    <span class="text-xl mr-3">🎁</span>
+                    <p class="text-xs text-emerald-700 leading-tight">
+                        Daftar sekarang & dapatkan <b>Akses Premium Gratis 3 Hari!</b>
+                    </p>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Nama Lengkap</label>
+                    <input type="text" id="reg-name" required placeholder="Nama Anda" class="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:outline-none focus:border-emerald-500 text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Email</label>
+                    <input type="email" id="reg-email" required placeholder="nama@email.com" class="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:outline-none focus:border-emerald-500 text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Password</label>
+                    <input type="password" id="reg-password" required placeholder="Min. 8 Karakter" class="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:outline-none focus:border-emerald-500 text-sm">
+                </div>
+                <button type="submit" class="w-full py-4 bg-slate-900 text-white rounded-2xl font-bold shadow-lg hover:bg-black transition-all">
+                    Daftar & Mulai Trial
+                </button>
+            </form>
+
+            <div class="mt-8 pt-6 border-t border-slate-50 text-center">
+                <p id="switch-text" class="text-sm text-slate-500">
+                    Belum punya akun? 
+                    <button type="button" onclick="window.toggleForm()" class="text-emerald-600 font-bold hover:underline">Daftar Gratis</button>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCaaCF_CQMftYWePC51dUWMRzndkZ-CW6o",
+            authDomain: "nutricalc-20eb4.firebaseapp.com",
+            projectId: "nutricalc-20eb4",
+            storageBucket: "nutricalc-20eb4.firebasestorage.app",
+            messagingSenderId: "361370382525",
+            appId: "1:361370382525:web:c11112ece7454b81a487d4"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Toggle Form Logic
+        window.toggleForm = () => {
+            const loginForm = document.getElementById('login-form');
+            const registerForm = document.getElementById('register-form');
+            const subtitle = document.getElementById('form-subtitle');
+            const switchText = document.getElementById('switch-text');
+
+            if (loginForm.classList.contains('hidden-form')) {
+                loginForm.classList.remove('hidden-form');
+                registerForm.classList.add('hidden-form');
+                subtitle.innerText = "Silakan masuk ke akun Anda.";
+                switchText.innerHTML = 'Belum punya akun? <button onclick="window.toggleForm()" class="text-emerald-600 font-bold hover:underline">Daftar Gratis</button>';
+            } else {
+                loginForm.classList.add('hidden-form');
+                registerForm.classList.remove('hidden-form');
+                subtitle.innerText = "Daftar untuk akses gizi profesional.";
+                switchText.innerHTML = 'Sudah punya akun? <button onclick="window.toggleForm()" class="text-emerald-600 font-bold hover:underline">Masuk di sini</button>';
+            }
+        };
+
+        // Handle Register
+        document.getElementById('register-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('reg-name').value;
+            const email = document.getElementById('reg-email').value;
+            const password = document.getElementById('reg-password').value;
+
+            try {
+                const userCred = await createUserWithEmailAndPassword(auth, email, password);
+                await setDoc(doc(db, "users", userCred.user.uid), {
+                    nama: name,
+                    email: email,
+                    status: "Trial",
+                    tanggalDaftar: serverTimestamp(),
+                    trialExpired: Date.now() + (3 * 24 * 60 * 60 * 1000)
+                });
+                window.location.href = "dashboard.html";
+            } catch (err) { alert(err.message); }
+        });
+
+        // Handle Login
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+                window.location.href = "dashboard.html";
+            } catch (err) { alert(err.message); }
+        });
+    </script>
+</body>
+</html>
