@@ -92,7 +92,6 @@
                         </div>
                     </div>
                 </div>
-                
                 <div class="bg-emerald-600 p-8 rounded-[2.5rem] text-white shadow-2xl shadow-emerald-200 relative overflow-hidden flex flex-col justify-center">
                     <div class="relative z-10">
                         <h4 class="text-emerald-200 text-[10px] font-black uppercase tracking-widest mb-2">Catatan Analis</h4>
@@ -164,8 +163,7 @@
                             <th class="p-6 text-center text-[10px] font-black text-slate-400 uppercase">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody id="riwayat-body">
-                        </tbody>
+                    <tbody id="riwayat-body"></tbody>
                 </table>
             </div>
         </div>
@@ -177,7 +175,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, collection, query, where, getDocs, limit, addDoc, serverTimestamp, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, collection, query, where, getDocs, limit, addDoc, serverTimestamp, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCaaCF_CQMftYWePC51dUWMRzndkZ-CW6o",
@@ -192,7 +190,6 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // --- 1. AUTH LOGIC ---
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 const userDoc = await getDoc(doc(db, "users", user.uid));
@@ -200,14 +197,13 @@
                     const data = userDoc.data();
                     document.getElementById('user-display-name').innerText = data.nama.split(' ')[0];
                     const diff = data.trialExpired - Date.now();
-                    document.getElementById('trial-info').innerText = diff > 0 ? `Trial: ${Math.ceil(diff/(1000*60*60*24))} Hari Lagi` : "Trial Habis";
+                    document.getElementById('trial-info').innerText = diff > 0 ? `Trial: ${Math.ceil(diff/(1000*60*60*24))} Hari Lagi` : "Masa Trial Habis";
                 }
             } else { window.location.href = "login.html"; }
         });
 
         window.logout = () => signOut(auth).then(() => window.location.href="login.html");
 
-        // --- 2. DATABASE SEARCH ---
         window.cariDatabase = async (input) => {
             const keyword = input.value.trim().toLowerCase();
             if (keyword.length < 3) return;
@@ -233,7 +229,7 @@
             const selectedOpt = Array.from(datalist.options).find(opt => opt.value === input.value);
             if (selectedOpt && selectedOpt.dataset.gizi) {
                 const data = JSON.parse(selectedOpt.dataset.gizi);
-                const gram = parseFloat(row.querySelector('.in-gram').value) || 0; // Fix: Default 0
+                const gram = parseFloat(row.querySelector('.in-gram').value) || 0;
                 const mapping = {'v-energi': 'energi', 'v-protein': 'protein', 'v-lemak': 'lemak', 'v-karbo': 'karbo', 'v-serat': 'serat', 'v-natrium': 'natrium', 'v-vitA': 'vitA', 'v-vitC': 'vitC', 'v-besi': 'besi'};
                 for (let [cls, key] of Object.entries(mapping)) {
                     row.querySelector('.' + cls).value = (data[key] * gram).toFixed(2);
@@ -242,13 +238,11 @@
             }
         };
 
-        // --- 3. TAB SWITCH LOGIC ---
         window.switchTab = async (tab) => {
             const calc = document.getElementById('section-kalkulator');
             const riwayat = document.getElementById('section-riwayat');
             const menuCalc = document.getElementById('menu-kalkulator');
             const menuRiwayat = document.getElementById('menu-riwayat');
-
             if(tab === 'riwayat') {
                 calc.classList.add('hidden');
                 riwayat.classList.remove('hidden');
@@ -263,15 +257,12 @@
             }
         };
 
-        // --- 4. HISTORY LOGIC ---
         window.saveHistory = async () => {
             const user = auth.currentUser;
             const rows = document.querySelectorAll('#badanTabel tr');
             if (!user || rows.length === 0) return alert("Data kosong!");
-
             const btn = document.getElementById('btn-save');
             btn.disabled = true; btn.innerText = "Menyimpan...";
-
             const items = [];
             rows.forEach(r => {
                 items.push({
@@ -288,7 +279,6 @@
                     besi: r.querySelector('.v-besi').value
                 });
             });
-
             const docData = {
                 userId: user.uid,
                 timestamp: serverTimestamp(),
@@ -297,7 +287,6 @@
                 summary: { energi: document.getElementById('rep-energi').innerText },
                 items: items
             };
-
             try {
                 await addDoc(collection(db, "history"), docData);
                 alert("Berhasil disimpan!");
@@ -309,26 +298,43 @@
             const user = auth.currentUser;
             const body = document.getElementById('riwayat-body');
             body.innerHTML = '<tr><td colspan="5" class="p-10 text-center">Memuat...</td></tr>';
-            
             const q = query(collection(db, "history"), where("userId", "==", user.uid));
             const snap = await getDocs(q);
             body.innerHTML = "";
-
+            if (snap.empty) {
+                body.innerHTML = '<tr><td colspan="5" class="p-10 text-center">Tidak ada riwayat.</td></tr>';
+                return;
+            }
             snap.forEach(docSnap => {
                 const d = docSnap.data();
                 const date = d.timestamp ? d.timestamp.toDate().toLocaleDateString('id-ID') : '-';
                 body.innerHTML += `
-                    <tr class="border-b border-slate-50">
-                        <td class="p-6 font-bold">${date}</td>
-                        <td class="p-6"><span class="text-[10px] font-black bg-slate-100 px-2 py-1 rounded">${d.targetLabel}</span></td>
+                    <tr class="border-b border-slate-50 hover:bg-slate-50/50 transition-colors">
+                        <td class="p-6 font-bold text-slate-700">${date}</td>
+                        <td class="p-6"><span class="text-[10px] font-black bg-slate-100 px-2 py-1 rounded text-slate-500">${d.targetLabel}</span></td>
                         <td class="p-6 font-bold text-emerald-600">${d.summary.energi} kkal</td>
                         <td class="p-6 text-xs text-slate-400 italic">${d.catatan.substring(0,20)}...</td>
                         <td class="p-6 text-center">
-                            <button onclick="window.viewHistoryDetail('${docSnap.id}')" class="px-4 py-2 bg-slate-900 text-white rounded-xl text-[10px] font-bold">DETAIL</button>
+                            <div class="flex justify-center gap-2">
+                                <button onclick="window.viewHistoryDetail('${docSnap.id}')" class="px-4 py-2 bg-slate-900 text-white rounded-xl text-[10px] font-bold hover:bg-black transition-all">DETAIL</button>
+                                <button onclick="window.deleteHistory('${docSnap.id}')" class="px-4 py-2 bg-red-50 text-red-500 rounded-xl text-[10px] font-bold hover:bg-red-500 hover:text-white transition-all">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </div>
                         </td>
                     </tr>
                 `;
             });
+        };
+
+        window.deleteHistory = async (id) => {
+            if (confirm("Hapus riwayat ini permanen?")) {
+                try {
+                    await deleteDoc(doc(db, "history", id));
+                    alert("Berhasil dihapus.");
+                    window.loadHistory();
+                } catch (e) { alert("Gagal menghapus."); }
+            }
         };
 
         window.viewHistoryDetail = async (id) => {
@@ -339,7 +345,6 @@
                 document.getElementById('badanTabel').innerHTML = "";
                 document.getElementById('catatan-analis').innerText = d.catatan;
                 document.getElementById('targetStatus').value = d.targetLabel;
-                
                 d.items.forEach(item => {
                     const tr = document.createElement('tr');
                     tr.innerHTML = `
@@ -362,7 +367,6 @@
             }
         };
 
-        // --- 5. CALCULATOR LOGIC ---
         const targetAKG = { "BALITA": { kal: 337.5, prot: 5, h_kal: 1350, h_prot: 20 }, "PAUD": { kal: 350, prot: 6.25, h_kal: 1400, h_prot: 25 }, "SD123": { kal: 495, prot: 12, h_kal: 1650, h_prot: 40 }, "SD456": { kal: 585, prot: 15.75, h_kal: 1950, h_prot: 52.5 }, "SMP": { kal: 667.5, prot: 20.25, h_kal: 2225, h_prot: 67.5 }, "SMA": { kal: 712.5, prot: 21, h_kal: 2375, h_prot: 70 }, "BUMIL": { kal: 753.9, prot: 23.4, h_kal: 2513, h_prot: 78 }, "BUSUI": { kal: 753.9, prot: 23.4, h_kal: 2513, h_prot: 78 } };
 
         window.tambahBaris = () => {
