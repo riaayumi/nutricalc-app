@@ -3,165 +3,155 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard | NutriCalc Profesional</title>
+    <title>Dashboard Profesional | NutriCalc</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        .locked-overlay { backdrop-filter: blur(12px); background: rgba(255,255,255,0.8); }
-        .nav-link:hover { background: rgba(16, 185, 129, 0.1); color: #10b981; }
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
         .nav-active { background: rgba(16, 185, 129, 0.1); color: #10b981; border-right: 4px solid #10b981; }
+        .in-nama { text-align: left !important; min-width: 180px; }
+        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+        
+        /* Table Styling */
+        .gizi-table th { font-size: 9px; text-transform: uppercase; letter-spacing: 0.05em; padding: 12px 4px; background: #f1f5f9; color: #64748b; border: 1px solid #e2e8f0; }
+        .gizi-table td { border: 1px solid #e2e8f0; padding: 4px; }
+        .gizi-table input { width: 100%; border: none; background: transparent; text-align: center; font-size: 12px; padding: 8px 4px; outline: none; }
+        .gizi-table input:focus { background: #f0fdf4; }
+
+        @media print {
+            .no-print { display: none !important; }
+            body { background: white; padding: 0; }
+            .print-container { width: 100%; max-width: 100%; margin: 0; padding: 20px; box-shadow: none; border: none; }
+            .gizi-table th, .gizi-table td { border: 1px solid #000 !important; color: black !important; }
+        }
     </style>
 </head>
-<body class="bg-slate-50 min-h-screen flex">
+<body class="flex min-h-screen">
 
-    <aside class="w-72 bg-white border-r border-slate-200 hidden md:flex flex-col z-20">
-        <div class="p-8">
-            <div class="flex items-center gap-3">
-                <svg width="35" height="35" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect width="40" height="40" rx="10" fill="#10b981"/>
-                    <path d="M20 10V30M10 20H30" stroke="white" stroke-width="4" stroke-linecap="round"/>
-                </svg>
-                <span class="text-2xl font-bold text-slate-800 tracking-tight">NutriCalc</span>
-            </div>
+    <aside class="w-64 bg-white border-r border-slate-200 hidden md:flex flex-col z-20 no-print">
+        <div class="p-8 flex items-center gap-3">
+            <svg width="32" height="32" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="40" height="40" rx="10" fill="#10b981"/><path d="M20 10V30M10 20H30" stroke="white" stroke-width="4" stroke-linecap="round"/></svg>
+            <span class="text-xl font-bold text-slate-800">NutriCalc</span>
         </div>
-
-        <nav class="flex-grow px-4 space-y-2">
-            <p class="px-4 text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-4">Menu Utama</p>
-            
-            <a href="#" class="nav-active flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all font-semibold">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
-                Kalkulator Gizi
-            </a>
-            
-            <a href="#" class="nav-link flex items-center gap-3 px-4 py-3.5 rounded-xl text-slate-500 transition-all font-medium">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                Riwayat Analisis
-            </a>
-
-            <a href="#" class="nav-link flex items-center gap-3 px-4 py-3.5 rounded-xl text-slate-500 transition-all font-medium">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.58 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.58 4 8 4s8-1.79 8-4M4 7c0-2.21 3.58-4 8-4s8 1.79 8 4m0 5c0 2.21-3.58 4-8 4s-8-1.79-8-4"/></svg>
-                Database Makanan
-            </a>
+        <nav class="flex-grow px-4 space-y-2 mt-4">
+            <a href="#" class="nav-active flex items-center gap-3 px-4 py-3 rounded-xl font-bold"><i class="fas fa-calculator w-5"></i> Kalkulator Gizi</a>
+            <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500 font-medium hover:bg-slate-50 transition-all"><i class="fas fa-history w-5"></i> Riwayat</a>
+            <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500 font-medium hover:bg-slate-50 transition-all"><i class="fas fa-database w-5"></i> Database</a>
         </nav>
-
         <div class="p-6 border-t border-slate-100">
-            <button onclick="window.logout()" class="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-sm font-semibold text-red-500 hover:bg-red-50 transition-all">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
-                Keluar Akun
-            </button>
+            <button onclick="window.logout()" class="w-full py-3 rounded-xl text-sm font-bold text-red-500 hover:bg-red-50 transition-all"><i class="fas fa-sign-out-alt mr-2"></i> Keluar</button>
         </div>
     </aside>
 
-    <main class="flex-grow p-6 md:p-12 relative overflow-y-auto">
-        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-12">
+    <main class="flex-grow p-6 md:p-10 print-container">
+        
+        <div class="flex flex-col md:flex-row justify-between items-start mb-10 gap-6">
             <div>
-                <h1 class="text-3xl font-bold text-slate-900 tracking-tight">Halo, <span id="user-display-name" class="text-emerald-600">...</span>!</h1>
-                <p id="trial-info" class="text-slate-500 mt-1 font-medium">Memuat informasi status...</p>
+                <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">ANALISIS KANDUNGAN GIZI</h1>
+                <div class="mt-2 text-sm text-slate-400 font-medium border-b border-dashed border-slate-300 pb-1 outline-none min-w-[200px]" contenteditable="true">Klik untuk tulis catatan laporan...</div>
             </div>
-            <div id="status-badge" class="px-5 py-2 rounded-2xl text-[11px] font-bold uppercase tracking-widest bg-slate-200 shadow-sm transition-all duration-500">
-                Memproses...
+            <div class="flex flex-col items-end gap-2 no-print">
+                <div id="status-badge" class="px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest bg-emerald-500 text-white shadow-lg shadow-emerald-100">Trial Mode</div>
+                <p id="trial-info" class="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">Memuat status...</p>
             </div>
         </div>
 
-        <div id="calculator-section" class="relative">
+        <div class="grid md:grid-cols-2 gap-6 mb-8 no-print">
+            <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
+                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">Target Status AKG</label>
+                <select id="targetStatus" onchange="hitungSemua()" class="w-full px-5 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:border-emerald-500 font-semibold text-slate-700">
+                    <option value="BALITA">BALITA (Target: 337.5 kkal)</option>
+                    <option value="PAUD">PAUD/TK (Target: 350 kkal)</option>
+                    <option value="SD123">SD123 (Target: 495 kkal)</option>
+                    <option value="SD456">SD456 (Target: 585 kkal)</option>
+                    <option value="SMP">SMP/MTS (Target: 667.5 kkal)</option>
+                    <option value="SMA">SMA/SMK (Target: 712.5 kkal)</option>
+                    <option value="BUMIL">BUMIL (Target: 753.9 kkal)</option>
+                    <option value="BUSUI">BUSUI (Target: 753.9 kkal)</option>
+                </select>
+            </div>
+            <div class="bg-emerald-600 p-6 rounded-3xl shadow-xl shadow-emerald-100 flex items-center justify-between text-white">
+                <div>
+                    <p class="text-[10px] font-black uppercase tracking-widest opacity-80 mb-1">Kontribusi Energi</p>
+                    <h2 class="text-3xl font-black" id="percent-energi">0%</h2>
+                </div>
+                <div class="text-right">
+                    <p class="text-[10px] font-black uppercase tracking-widest opacity-80 mb-1">Kontribusi Protein</p>
+                    <h2 class="text-3xl font-black" id="percent-protein">0%</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-[2.5rem] shadow-xl shadow-slate-200/50 border border-white overflow-hidden mb-10">
+            <div class="overflow-x-auto">
+                <table class="w-full gizi-table">
+                    <thead>
+                        <tr>
+                            <th class="in-nama">Bahan Makanan</th>
+                            <th style="width:70px">Berat<span>(g)</span></th>
+                            <th>Energi<span>(kkal)</span></th>
+                            <th>Prot<span>(g)</span></th>
+                            <th>Lemak<span>(g)</span></th>
+                            <th>Karbo<span>(g)</span></th>
+                            <th>Serat<span>(g)</span></th>
+                            <th>Gula<span>(g)</span></th>
+                            <th>Na<span>(mg)</span></th>
+                            <th>Vit A<span>(mcg)</span></th>
+                            <th>Vit C<span>(mg)</span></th>
+                            <th>F.E<span>(mg)</span></th>
+                            <th class="no-print"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="badanTabel"></tbody>
+                </table>
+            </div>
             
-            <div class="bg-white p-8 md:p-10 rounded-[2.5rem] shadow-xl shadow-slate-200/50 border border-white">
-                <div class="flex items-center gap-4 mb-10">
-                    <div class="w-12 h-12 bg-emerald-500 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-emerald-200">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
-                    </div>
-                    <div>
-                        <h3 class="text-xl font-bold text-slate-800">Kalkulator Gizi Profesional</h3>
-                        <p class="text-sm text-slate-400">Analisis nutrisi akurat dari 4.000+ database</p>
-                    </div>
-                </div>
+            <div class="p-6 bg-slate-50 flex flex-wrap gap-4 no-print border-t border-slate-100">
+                <button onclick="tambahBaris()" class="px-6 py-3 bg-emerald-600 text-white rounded-xl font-bold text-sm shadow-lg shadow-emerald-100 hover:bg-emerald-700 transition-all"><i class="fas fa-plus mr-2"></i> Tambah Bahan</button>
+                <button onclick="resetForm()" class="px-6 py-3 bg-white border border-slate-200 text-slate-500 rounded-xl font-bold text-sm hover:bg-slate-100 transition-all">Reset</button>
+                <button onclick="window.print()" class="px-8 py-3 bg-slate-900 text-white rounded-xl font-bold text-sm shadow-lg ml-auto hover:bg-black transition-all"><i class="fas fa-print mr-2"></i> Cetak Laporan PDF</button>
+            </div>
+        </div>
 
-                <div class="grid lg:grid-cols-2 gap-12">
-                    <div class="space-y-8">
-                        <div class="space-y-4">
-                            <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest">Cari Bahan Pangan</label>
-                            <div class="relative">
-                                <input type="text" id="search-food" placeholder="Ketik nama makanan..." 
-                                    class="w-full px-6 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all outline-none">
-                                <div id="search-results" class="absolute z-50 w-full bg-white shadow-2xl rounded-2xl mt-3 border border-slate-100 hidden max-h-64 overflow-y-auto p-2">
-                                    </div>
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-2 gap-6">
-                            <div class="space-y-4">
-                                <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest">Berat (Gram)</label>
-                                <input type="number" id="food-weight" value="100" class="w-full px-6 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:border-emerald-500 transition-all outline-none">
-                            </div>
-                            <div class="flex items-end">
-                                <button id="add-to-list" class="w-full py-4 bg-emerald-600 text-white rounded-2xl font-bold shadow-lg shadow-emerald-200 hover:bg-emerald-700 hover:translate-y-[-2px] active:translate-y-[0px] transition-all">
-                                    Tambahkan
-                                </button>
-                            </div>
-                        </div>
+        <div class="grid lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-2 bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm">
+                <h3 class="text-sm font-black text-slate-800 uppercase tracking-widest mb-6 flex items-center gap-2">
+                    <span class="w-2 h-6 bg-emerald-500 rounded-full"></span>
+                    Detail Capaian AKG (<span id="label-target">BALITA</span>)
+                </h3>
+                <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                    <div class="bg-slate-50 p-4 rounded-2xl">
+                        <p class="text-[9px] font-black text-slate-400 uppercase mb-2">Energi</p>
+                        <p class="text-sm font-bold text-slate-700"><span id="rep-energi">0</span> / <span id="tar-energi">0</span></p>
                     </div>
-
-                    <div class="bg-slate-900 rounded-[2.5rem] p-10 text-white relative overflow-hidden flex flex-col justify-between shadow-2xl">
-                        <div class="relative z-10">
-                            <h4 class="text-emerald-400 text-xs font-bold uppercase tracking-[0.2em] mb-8">Ringkasan Nutrisi</h4>
-                            <div class="grid grid-cols-2 gap-y-10 gap-x-6">
-                                <div>
-                                    <span class="block text-4xl font-bold text-white mb-1" id="total-calories">0</span>
-                                    <span class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Total Kalori</span>
-                                </div>
-                                <div>
-                                    <span class="block text-2xl font-bold text-emerald-400 mb-1" id="total-protein">0g</span>
-                                    <span class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Protein</span>
-                                </div>
-                                <div>
-                                    <span class="block text-2xl font-bold text-emerald-400 mb-1" id="total-carbs">0g</span>
-                                    <span class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Karbohidrat</span>
-                                </div>
-                                <div>
-                                    <span class="block text-2xl font-bold text-emerald-400 mb-1" id="total-fat">0g</span>
-                                    <span class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Lemak</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="absolute -top-10 -right-10 w-40 h-40 bg-emerald-500/20 rounded-full blur-3xl"></div>
+                    <div class="bg-slate-50 p-4 rounded-2xl">
+                        <p class="text-[9px] font-black text-slate-400 uppercase mb-2">Protein</p>
+                        <p class="text-sm font-bold text-slate-700"><span id="rep-protein">0</span> / <span id="tar-protein">0</span></p>
                     </div>
-                </div>
-
-                <div class="mt-12 border-t border-slate-50 pt-10">
-                    <h4 class="text-sm font-bold text-slate-800 mb-6 flex items-center gap-2">
-                        <svg class="w-4 h-4 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z"/></svg>
-                        Daftar Bahan Terpilih
-                    </h4>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left">
-                            <thead class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                                <tr class="border-b border-slate-100">
-                                    <th class="pb-4">Nama Makanan</th>
-                                    <th class="pb-4 text-center">Porsi</th>
-                                    <th class="pb-4 text-center">Kalori</th>
-                                    <th class="pb-4 text-right">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody id="food-table-body" class="text-sm text-slate-600">
-                                </tbody>
-                        </table>
+                    <div class="bg-slate-50 p-4 rounded-2xl">
+                        <p class="text-[9px] font-black text-slate-400 uppercase mb-2">Lemak</p>
+                        <p class="text-sm font-bold text-slate-700"><span id="rep-lemak">0</span> / <span id="tar-lemak">0</span></p>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-2xl">
+                        <p class="text-[9px] font-black text-slate-400 uppercase mb-2">Karbo</p>
+                        <p class="text-sm font-bold text-slate-700"><span id="rep-karbo">0</span> / <span id="tar-karbo">0</span></p>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-2xl">
+                        <p class="text-[9px] font-black text-slate-400 uppercase mb-2">Serat</p>
+                        <p class="text-sm font-bold text-slate-700"><span id="rep-serat">0</span> / <span id="tar-serat">0</span></p>
                     </div>
                 </div>
             </div>
 
-            <div id="expired-lock" class="hidden absolute inset-0 locked-overlay flex flex-col items-center justify-center text-center p-12 z-50 rounded-[3rem]">
-                <div class="w-20 h-20 bg-red-100 text-red-500 rounded-3xl flex items-center justify-center mb-6">
-                    <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-                </div>
-                <h2 class="text-3xl font-bold text-slate-900 mb-4">Masa Trial Berakhir</h2>
-                <p class="text-slate-500 mb-8 max-w-sm font-medium">Terima kasih telah mencoba NutriCalc! Silakan berlangganan untuk akses tak terbatas ke 4.000+ data makanan.</p>
-                <a href="index.html#pricing" class="bg-emerald-600 text-white px-10 py-4 rounded-2xl font-bold shadow-xl shadow-emerald-200 hover:bg-emerald-700 transition-all">
-                    Upgrade ke Premium
-                </a>
+            <div id="recom-box" class="bg-orange-50 border border-orange-100 p-8 rounded-[2.5rem] hidden">
+                <h4 class="text-orange-700 font-bold text-sm mb-4 flex items-center gap-2"><i class="fas fa-lightbulb"></i> Rekomendasi Gizi</h4>
+                <ul id="recom-list" class="text-xs text-orange-600 space-y-3 font-medium leading-relaxed"></ul>
             </div>
         </div>
     </main>
+
+    <datalist id="daftarBahan"></datalist>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
@@ -181,43 +171,107 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
+        // --- AUTH LOGIC ---
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                const docRef = doc(db, "users", user.uid);
-                const docSnap = await getDoc(docRef);
-                
-                if (docSnap.exists()) {
-                    const data = docSnap.data();
-                    document.getElementById('user-display-name').innerText = data.nama;
-
-                    const now = Date.now();
-                    const diff = data.trialExpired - now;
-                    const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
-
-                    if (data.status === "Premium") {
-                        showStatus("Premium", "bg-emerald-500 text-white shadow-emerald-100", "Akses Premium Aktif");
-                    } else if (diff > 0) {
-                        showStatus("Trial Mode", "bg-blue-500 text-white shadow-blue-100", `Masa trial tersisa ${days} hari lagi`);
-                    } else {
-                        showStatus("Expired", "bg-red-500 text-white shadow-red-100", "Masa trial telah berakhir");
-                        document.getElementById('expired-lock').classList.remove('hidden');
-                    }
+                const userDoc = await getDoc(doc(db, "users", user.uid));
+                if (userDoc.exists()) {
+                    const data = userDoc.data();
+                    document.getElementById('trial-info').innerText = `Masa Trial: ${Math.ceil((data.trialExpired - Date.now()) / (1000*60*60*24))} Hari Lagi`;
                 }
-            } else {
-                window.location.href = "login.html";
-            }
+            } else { window.location.href = "login.html"; }
         });
 
-        function showStatus(text, classes, info) {
-            const badge = document.getElementById('status-badge');
-            badge.innerText = text;
-            badge.className = `px-5 py-2 rounded-2xl text-[11px] font-bold uppercase tracking-widest transition-all duration-500 ${classes}`;
-            document.getElementById('trial-info').innerText = info;
+        window.logout = () => signOut(auth);
+
+        // --- KALKULATOR LOGIC (LOGIKA ASLI ANDA) ---
+        const targetAKG = {
+            "BALITA": { kal: 337.5, prot: 5, lemak: 11.25, karbo: 50, serat: 3.7, h_kal: 1350, h_prot: 20, h_lemak: 45, h_karbo: 200, h_serat: 15 },
+            "PAUD":  { kal: 350,   prot: 6.25, lemak: 12.5, karbo: 55,    serat: 3.7, h_kal: 1400, h_prot: 25,  h_lemak: 50,  h_karbo: 220, h_serat: 15 },
+            "SD123": { kal: 495,   prot: 12,   lemak: 16.5, karbo: 75,    serat: 5.0, h_kal: 1650, h_prot: 40,  h_lemak: 55,  h_karbo: 250, h_serat: 20 },
+            "SD456": { kal: 585,   prot: 15.75,lemak: 19.5, karbo: 87,    serat: 6.2, h_kal: 1950, h_prot: 52.5,h_lemak: 65,  h_karbo: 290, h_serat: 25 },
+            "SMP":   { kal: 667.5, prot: 20.25,lemak: 22.5, karbo: 97.5,  serat: 7.5, h_kal: 2225, h_prot: 67.5,h_lemak: 75,  h_karbo: 325, h_serat: 30 },
+            "SMA":   { kal: 712.5, prot: 21,   lemak: 23.25, karbo: 105,   serat: 8.7, h_kal: 2375, h_prot: 70,  h_lemak: 77.5,h_karbo: 350, h_serat: 35 },
+            "BUMIL": { kal: 753.9, prot: 23.4, lemak: 18.6, karbo: 117.9, serat: 9.0, h_kal: 2513, h_prot: 78,  h_lemak: 62,  h_karbo: 393, h_serat: 36 },
+            "BUSUI": { kal: 753.9, prot: 23.4, lemak: 18.6, karbo: 117.9, serat: 9.0, h_kal: 2513, h_prot: 78,  h_lemak: 62,  h_karbo: 393, h_serat: 36 }
+        };
+
+        window.tambahBaris = () => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td><input type="text" list="daftarBahan" class="in-nama font-bold text-slate-700"></td>
+                <td><input type="number" class="in-gram font-bold" value="0" oninput="window.hitungSemua()"></td>
+                <td><input type="number" step="0.1" class="v-energi" value="0" oninput="window.hitungSemua()"></td>
+                <td><input type="number" step="0.1" class="v-protein" value="0" oninput="window.hitungSemua()"></td>
+                <td><input type="number" step="0.1" class="v-lemak" value="0" oninput="window.hitungSemua()"></td>
+                <td><input type="number" step="0.1" class="v-karbo" value="0" oninput="window.hitungSemua()"></td>
+                <td><input type="number" step="0.1" class="v-serat" value="0" oninput="window.hitungSemua()"></td>
+                <td><input type="number" step="0.1" class="v-gula" value="0" oninput="window.hitungSemua()"></td>
+                <td><input type="number" step="0.1" class="v-natrium" value="0" oninput="window.hitungSemua()"></td>
+                <td><input type="number" step="0.1" class="v-vitA" value="0" oninput="window.hitungSemua()"></td>
+                <td><input type="number" step="0.1" class="v-vitC" value="0" oninput="window.hitungSemua()"></td>
+                <td><input type="number" step="0.1" class="v-besi" value="0" oninput="window.hitungSemua()"></td>
+                <td class="no-print text-center"><button onclick="this.parentElement.parentElement.remove();window.hitungSemua()" class="text-slate-300 hover:text-red-500 transition-colors"><i class="fas fa-trash-alt"></i></button></td>
+            `;
+            document.getElementById('badanTabel').appendChild(tr);
+        };
+
+        window.hitungSemua = () => {
+            const fields = ['energi', 'protein', 'lemak', 'karbo', 'serat', 'gula', 'natrium', 'vitA', 'vitC', 'besi'];
+            let total = {};
+            fields.forEach(f => total[f] = 0);
+            
+            document.querySelectorAll('#badanTabel tr').forEach(row => {
+                fields.forEach(f => {
+                    total[f] += parseFloat(row.querySelector(`.v-${f}`).value) || 0;
+                });
+            });
+
+            const targetKey = document.getElementById('targetStatus').value;
+            const target = targetAKG[targetKey];
+            
+            // Update Summary
+            document.getElementById('percent-energi').innerText = (total.energi / target.h_kal * 100).toFixed(1) + "%";
+            document.getElementById('percent-protein').innerText = (total.protein / target.h_prot * 100).toFixed(1) + "%";
+            
+            // Update Grid Detail
+            document.getElementById('label-target').innerText = targetKey;
+            document.getElementById('rep-energi').innerText = total.energi.toFixed(1);
+            document.getElementById('tar-energi').innerText = target.kal;
+            document.getElementById('rep-protein').innerText = total.protein.toFixed(1);
+            document.getElementById('tar-protein').innerText = target.prot;
+            document.getElementById('rep-lemak').innerText = total.lemak.toFixed(1);
+            document.getElementById('tar-lemak').innerText = target.lemak;
+            document.getElementById('rep-karbo').innerText = total.karbo.toFixed(1);
+            document.getElementById('tar-karbo').innerText = target.karbo;
+            document.getElementById('rep-serat').innerText = total.serat.toFixed(1);
+            document.getElementById('tar-serat').innerText = target.serat;
+
+            updateRekomendasi(total, target);
+        };
+
+        function updateRekomendasi(total, target) {
+            const recomBox = document.getElementById('recom-box');
+            const recomList = document.getElementById('recom-list');
+            recomList.innerHTML = '';
+            let hasRecom = false;
+
+            if (total.energi < target.kal) {
+                const nasi = Math.ceil((target.kal - total.energi) / 1.8);
+                recomList.innerHTML += `<li><i class="fas fa-check-circle mr-2"></i> Tambah ±${nasi}g Nasi untuk energi.</li>`;
+                hasRecom = true;
+            }
+            if (total.protein < target.prot) {
+                const ayam = Math.ceil((target.prot - total.protein) / 0.27);
+                recomList.innerHTML += `<li><i class="fas fa-check-circle mr-2"></i> Tambah ±${ayam}g Lauk Pauk untuk protein.</li>`;
+                hasRecom = true;
+            }
+            recomBox.classList.toggle('hidden', !hasRecom);
         }
 
-        window.logout = () => {
-            signOut(auth).then(() => { window.location.href = "login.html"; });
-        };
+        window.resetForm = () => { if(confirm("Reset semua data?")) { document.getElementById('badanTabel').innerHTML = ''; window.tambahBaris(); window.hitungSemua(); }};
+
+        window.tambahBaris();
     </script>
 </body>
 </html>
