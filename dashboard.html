@@ -19,6 +19,10 @@
         .gizi-table tr:hover { background-color: #f8fafc; }
         .hidden { display: none; }
 
+        /* Animation for Modal */
+        .modal-animate-in { animation: fadeIn 0.2s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+
         @media print {
             .no-print { display: none !important; }
             body { background: white; padding: 0; }
@@ -70,7 +74,7 @@
                 <div class="lg:col-span-2 bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm flex flex-col md:flex-row items-center justify-between gap-8">
                     <div class="w-full">
                         <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Target Rekomendasi Gizi</label>
-                        <select id="targetStatus" onchange="window.hitungSemua()" class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:border-emerald-500 font-bold text-slate-700 appearance-none cursor-pointer transition-all">
+                        <select id="targetStatus" onchange="window.hitungSemua()" class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:border-emerald-500 font-bold text-slate-700 cursor-pointer">
                             <option value="BALITA">BALITA (Target: 337.5 kkal)</option>
                             <option value="PAUD">PAUD/TK (Target: 350 kkal)</option>
                             <option value="SD123">SD123 (Target: 495 kkal)</option>
@@ -81,7 +85,7 @@
                             <option value="BUSUI">BUSUI (Target: 753.9 kkal)</option>
                         </select>
                     </div>
-                    <div class="flex gap-4 w-full md:w-auto">
+                    <div class="flex gap-4">
                         <div class="text-center bg-emerald-50 p-6 rounded-[2rem] min-w-[120px]">
                             <p class="text-[9px] font-black text-emerald-600 uppercase mb-2">Energi</p>
                             <h2 class="text-2xl font-black text-emerald-700" id="percent-energi">0%</h2>
@@ -93,18 +97,16 @@
                     </div>
                 </div>
                 <div class="bg-emerald-600 p-8 rounded-[2.5rem] text-white shadow-2xl shadow-emerald-200 relative overflow-hidden flex flex-col justify-center">
-                    <div class="relative z-10">
-                        <h4 class="text-emerald-200 text-[10px] font-black uppercase tracking-widest mb-2">Catatan Analis</h4>
-                        <div id="catatan-analis" class="text-sm font-medium border-b border-emerald-400/50 pb-2 outline-none" contenteditable="true">Klik untuk menulis catatan...</div>
-                    </div>
+                    <h4 class="text-emerald-200 text-[10px] font-black uppercase tracking-widest mb-2">Catatan Analis</h4>
+                    <div id="catatan-analis" class="text-sm font-medium border-b border-emerald-400/50 pb-2 outline-none" contenteditable="true">Klik untuk menulis catatan...</div>
                     <i class="fas fa-file-medical absolute -bottom-4 -right-4 text-8xl text-emerald-500 opacity-20"></i>
                 </div>
             </div>
 
-            <div class="bg-white rounded-[2.5rem] shadow-xl shadow-slate-200/40 border border-white overflow-hidden mb-10">
+            <div class="bg-white rounded-[2.5rem] shadow-xl border border-white overflow-hidden mb-10">
                 <div class="p-6 border-b border-slate-50 flex justify-between items-center no-print">
-                    <h3 class="font-bold text-slate-800 flex items-center gap-2 text-sm uppercase tracking-widest"><i class="fas fa-list text-emerald-500"></i> Rincian Bahan Pangan</h3>
-                    <button onclick="window.tambahBaris()" class="text-xs font-black uppercase tracking-widest text-emerald-600 hover:text-emerald-700 transition-all"><i class="fas fa-plus-circle mr-1"></i> Tambah Bahan</button>
+                    <h3 class="font-bold text-slate-800 text-sm uppercase tracking-widest">Rincian Bahan Pangan</h3>
+                    <button onclick="window.tambahBaris()" class="text-xs font-black uppercase text-emerald-600 hover:text-emerald-700"><i class="fas fa-plus-circle mr-1"></i> Tambah Bahan</button>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="w-full gizi-table">
@@ -112,15 +114,7 @@
                             <tr>
                                 <th class="in-nama">Bahan Makanan</th>
                                 <th style="width:80px">Berat<span>(g)</span></th>
-                                <th>Energi</th>
-                                <th>Prot</th>
-                                <th>Lmk</th>
-                                <th>Krb</th>
-                                <th>Srt</th>
-                                <th>Na</th>
-                                <th>Vit A</th>
-                                <th>Vit C</th>
-                                <th>Besi</th>
+                                <th>Energi</th><th>Prot</th><th>Lmk</th><th>Krb</th><th>Srt</th><th>Na</th><th>Vit A</th><th>Vit C</th><th>Besi</th>
                                 <th class="no-print"></th>
                             </tr>
                         </thead>
@@ -128,24 +122,7 @@
                     </table>
                 </div>
                 <div class="p-6 bg-slate-50/50 flex justify-end no-print">
-                    <button onclick="window.resetForm()" class="text-[10px] font-black text-red-400 hover:text-red-600 transition-all uppercase tracking-widest"><i class="fas fa-undo mr-1"></i> Reset Tabel</button>
-                </div>
-            </div>
-
-            <div class="grid lg:grid-cols-3 gap-8">
-                <div class="lg:col-span-2 bg-white p-10 rounded-[3rem] border border-slate-100 shadow-sm">
-                    <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-8">Hasil Capaian Nutrisi Detil</h3>
-                    <div class="grid grid-cols-2 md:grid-cols-5 gap-6 text-center">
-                        <div class="space-y-1"><p class="text-[9px] font-black text-slate-400 uppercase">Energi</p><p class="text-base font-bold text-slate-700"><span id="rep-energi">0</span><span class="text-[10px] text-slate-300 ml-1">kcal</span></p></div>
-                        <div class="space-y-1"><p class="text-[9px] font-black text-slate-400 uppercase">Protein</p><p class="text-base font-bold text-slate-700"><span id="rep-protein">0</span><span class="text-[10px] text-slate-300 ml-1">g</span></p></div>
-                        <div class="space-y-1"><p class="text-[9px] font-black text-slate-400 uppercase">Lemak</p><p class="text-base font-bold text-slate-700"><span id="rep-lemak">0</span><span class="text-[10px] text-slate-300 ml-1">g</span></p></div>
-                        <div class="space-y-1"><p class="text-[9px] font-black text-slate-400 uppercase">Karbo</p><p class="text-base font-bold text-slate-700"><span id="rep-karbo">0</span><span class="text-[10px] text-slate-300 ml-1">g</span></p></div>
-                        <div class="space-y-1"><p class="text-[9px] font-black text-slate-400 uppercase">Serat</p><p class="text-base font-bold text-slate-700"><span id="rep-serat">0</span><span class="text-[10px] text-slate-300 ml-1">g</span></p></div>
-                    </div>
-                </div>
-                <div id="recom-box" class="bg-white border border-emerald-100 p-10 rounded-[3rem] shadow-xl shadow-emerald-50 hidden">
-                    <h4 class="text-emerald-700 font-black text-xs uppercase tracking-widest mb-6 flex items-center gap-2"><i class="fas fa-lightbulb"></i> Rekomendasi</h4>
-                    <ul id="recom-list" class="text-xs text-slate-600 space-y-4 font-medium leading-relaxed"></ul>
+                    <button onclick="window.resetForm()" class="text-[10px] font-black text-red-400 hover:text-red-600 uppercase tracking-widest"><i class="fas fa-undo mr-1"></i> Reset Tabel</button>
                 </div>
             </div>
         </div>
@@ -167,8 +144,18 @@
                 </table>
             </div>
         </div>
-
     </main>
+
+    <div id="custom-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+        <div class="bg-white rounded-[2.5rem] w-full max-w-sm overflow-hidden shadow-2xl modal-animate-in">
+            <div class="p-8 text-center">
+                <div id="modal-icon" class="w-20 h-20 mx-auto mb-6 flex items-center justify-center rounded-full text-3xl"></div>
+                <h3 id="modal-title" class="text-xl font-black text-slate-900 mb-2"></h3>
+                <p id="modal-message" class="text-sm text-slate-500 font-medium mb-8 leading-relaxed"></p>
+                <div id="modal-buttons" class="flex gap-3"></div>
+            </div>
+        </div>
+    </div>
 
     <datalist id="daftarBahan"></datalist>
 
@@ -185,11 +172,38 @@
             messagingSenderId: "361370382525",
             appId: "1:361370382525:web:c11112ece7454b81a487d4"
         };
-
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
 
+        // --- FUNGSI MODAL MODERN ---
+        window.showModal = ({ title, message, type, onConfirm }) => {
+            const modal = document.getElementById('custom-modal');
+            const iconBox = document.getElementById('modal-icon');
+            const titleEl = document.getElementById('modal-title');
+            const msgEl = document.getElementById('modal-message');
+            const btnBox = document.getElementById('modal-buttons');
+
+            modal.classList.remove('hidden');
+            btnBox.innerHTML = '';
+            titleEl.innerText = title;
+            msgEl.innerText = message;
+
+            if (type === 'confirm') {
+                iconBox.className = "w-20 h-20 mx-auto mb-6 flex items-center justify-center rounded-full bg-red-100 text-red-500";
+                iconBox.innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
+                const b1 = document.createElement('button'); b1.className="flex-1 py-4 bg-slate-100 rounded-2xl font-bold text-sm"; b1.innerText="Batal"; b1.onclick=()=>modal.classList.add('hidden');
+                const b2 = document.createElement('button'); b2.className="flex-1 py-4 bg-red-500 text-white rounded-2xl font-bold text-sm shadow-lg shadow-red-100"; b2.innerText="Ya, Hapus"; b2.onclick=()=>{onConfirm(); modal.classList.add('hidden');};
+                btnBox.append(b1, b2);
+            } else {
+                iconBox.className = "w-20 h-20 mx-auto mb-6 flex items-center justify-center rounded-full bg-emerald-100 text-emerald-500";
+                iconBox.innerHTML = '<i class="fas fa-check-circle"></i>';
+                const b1 = document.createElement('button'); b1.className="w-full py-4 bg-emerald-600 text-white rounded-2xl font-bold text-sm"; b1.innerText="Mengerti"; b1.onclick=()=>modal.classList.add('hidden');
+                btnBox.append(b1);
+            }
+        };
+
+        // --- AUTH & SEARCH ---
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 const userDoc = await getDoc(doc(db, "users", user.uid));
@@ -197,7 +211,7 @@
                     const data = userDoc.data();
                     document.getElementById('user-display-name').innerText = data.nama.split(' ')[0];
                     const diff = data.trialExpired - Date.now();
-                    document.getElementById('trial-info').innerText = diff > 0 ? `Trial: ${Math.ceil(diff/(1000*60*60*24))} Hari Lagi` : "Masa Trial Habis";
+                    document.getElementById('trial-info').innerText = diff > 0 ? `Trial: ${Math.ceil(diff/(1000*60*60*24))} Hari Lagi` : "Habis";
                 }
             } else { window.location.href = "login.html"; }
         });
@@ -207,134 +221,79 @@
         window.cariDatabase = async (input) => {
             const keyword = input.value.trim().toLowerCase();
             if (keyword.length < 3) return;
-            try {
-                const foodRef = collection(db, "food_database");
-                const q = query(foodRef, where("nama_search", ">=", keyword), where("nama_search", "<=", keyword + "\uf8ff"), limit(6));
-                const querySnapshot = await getDocs(q);
-                const datalist = document.getElementById('daftarBahan');
-                datalist.innerHTML = "";
-                querySnapshot.forEach((doc) => {
-                    const data = doc.data();
-                    let opt = document.createElement('option');
-                    opt.value = data.nama;
-                    opt.dataset.gizi = JSON.stringify(data);
-                    datalist.appendChild(opt);
-                });
-            } catch (e) { console.error(e); }
+            const q = query(collection(db, "food_database"), where("nama_search", ">=", keyword), where("nama_search", "<=", keyword + "\uf8ff"), limit(6));
+            const snap = await getDocs(q);
+            const list = document.getElementById('daftarBahan');
+            list.innerHTML = "";
+            snap.forEach(d => {
+                let opt = document.createElement('option'); opt.value = d.data().nama; opt.dataset.gizi = JSON.stringify(d.data()); list.appendChild(opt);
+            });
         };
 
         window.autoFillGizi = (input) => {
             const row = input.closest('tr');
-            const datalist = document.getElementById('daftarBahan');
-            const selectedOpt = Array.from(datalist.options).find(opt => opt.value === input.value);
-            if (selectedOpt && selectedOpt.dataset.gizi) {
-                const data = JSON.parse(selectedOpt.dataset.gizi);
+            const selected = Array.from(document.getElementById('daftarBahan').options).find(o => o.value === input.value);
+            if (selected) {
+                const data = JSON.parse(selected.dataset.gizi);
                 const gram = parseFloat(row.querySelector('.in-gram').value) || 0;
-                const mapping = {'v-energi': 'energi', 'v-protein': 'protein', 'v-lemak': 'lemak', 'v-karbo': 'karbo', 'v-serat': 'serat', 'v-natrium': 'natrium', 'v-vitA': 'vitA', 'v-vitC': 'vitC', 'v-besi': 'besi'};
-                for (let [cls, key] of Object.entries(mapping)) {
-                    row.querySelector('.' + cls).value = (data[key] * gram).toFixed(2);
-                }
+                const map = {'v-energi':'energi','v-protein':'protein','v-lemak':'lemak','v-karbo':'karbo','v-serat':'serat','v-natrium':'natrium','v-vitA':'vitA','v-vitC':'vitC','v-besi':'besi'};
+                for (let [c, k] of Object.entries(map)) row.querySelector('.'+c).value = (data[k]*gram).toFixed(2);
                 window.hitungSemua();
             }
         };
 
-        window.switchTab = async (tab) => {
-            const calc = document.getElementById('section-kalkulator');
-            const riwayat = document.getElementById('section-riwayat');
-            const menuCalc = document.getElementById('menu-kalkulator');
-            const menuRiwayat = document.getElementById('menu-riwayat');
-            if(tab === 'riwayat') {
-                calc.classList.add('hidden');
-                riwayat.classList.remove('hidden');
-                menuCalc.classList.remove('nav-active', 'font-bold');
-                menuRiwayat.classList.add('nav-active', 'font-bold');
-                await window.loadHistory();
-            } else {
-                calc.classList.remove('hidden');
-                riwayat.classList.add('hidden');
-                menuRiwayat.classList.remove('nav-active', 'font-bold');
-                menuCalc.classList.add('nav-active', 'font-bold');
-            }
+        // --- TAB & HISTORY ---
+        window.switchTab = async (t) => {
+            document.getElementById('section-kalkulator').classList.toggle('hidden', t==='riwayat');
+            document.getElementById('section-riwayat').classList.toggle('hidden', t==='kalkulator');
+            document.getElementById('menu-kalkulator').classList.toggle('nav-active', t==='kalkulator');
+            document.getElementById('menu-riwayat').classList.toggle('nav-active', t==='riwayat');
+            if(t==='riwayat') await window.loadHistory();
         };
 
         window.saveHistory = async () => {
             const user = auth.currentUser;
             const rows = document.querySelectorAll('#badanTabel tr');
-            if (!user || rows.length === 0) return alert("Data kosong!");
-            const btn = document.getElementById('btn-save');
-            btn.disabled = true; btn.innerText = "Menyimpan...";
-            const items = [];
-            rows.forEach(r => {
-                items.push({
-                    nama: r.querySelector('.in-nama').value,
-                    berat: r.querySelector('.in-gram').value,
-                    energi: r.querySelector('.v-energi').value,
-                    protein: r.querySelector('.v-protein').value,
-                    lemak: r.querySelector('.v-lemak').value,
-                    karbo: r.querySelector('.v-karbo').value,
-                    serat: r.querySelector('.v-serat').value,
-                    natrium: r.querySelector('.v-natrium').value,
-                    vitA: r.querySelector('.v-vitA').value,
-                    vitC: r.querySelector('.v-vitC').value,
-                    besi: r.querySelector('.v-besi').value
-                });
-            });
-            const docData = {
-                userId: user.uid,
-                timestamp: serverTimestamp(),
-                targetLabel: document.getElementById('targetStatus').value,
-                catatan: document.getElementById('catatan-analis').innerText,
-                summary: { energi: document.getElementById('rep-energi').innerText },
-                items: items
-            };
+            if (!user || rows.length === 0 || rows[0].querySelector('.v-energi').value == 0) return window.showModal({title:"Kosong", message:"Lengkapi data tabel sebelum simpan.", type:"error"});
+            const items = Array.from(rows).map(r => ({ nama: r.querySelector('.in-nama').value, berat: r.querySelector('.in-gram').value, energi: r.querySelector('.v-energi').value, protein: r.querySelector('.v-protein').value, lemak: r.querySelector('.v-lemak').value, karbo: r.querySelector('.v-karbo').value, serat: r.querySelector('.v-serat').value, natrium: r.querySelector('.v-natrium').value, vitA: r.querySelector('.v-vitA').value, vitC: r.querySelector('.v-vitC').value, besi: r.querySelector('.v-besi').value }));
             try {
-                await addDoc(collection(db, "history"), docData);
-                alert("Berhasil disimpan!");
+                await addDoc(collection(db, "history"), { userId: user.uid, timestamp: serverTimestamp(), targetLabel: document.getElementById('targetStatus').value, catatan: document.getElementById('catatan-analis').innerText, summary: { energi: document.getElementById('rep-energi').innerText }, items: items });
+                window.showModal({title:"Berhasil!", message:"Data riwayat telah disimpan dengan aman.", type:"success"});
             } catch (e) { alert("Gagal Simpan"); }
-            finally { btn.disabled = false; btn.innerHTML = '<i class="fas fa-save"></i> Simpan Riwayat'; }
         };
 
         window.loadHistory = async () => {
-            const user = auth.currentUser;
             const body = document.getElementById('riwayat-body');
             body.innerHTML = '<tr><td colspan="5" class="p-10 text-center">Memuat...</td></tr>';
-            const q = query(collection(db, "history"), where("userId", "==", user.uid));
+            const q = query(collection(db, "history"), where("userId", "==", auth.currentUser.uid));
             const snap = await getDocs(q);
-            body.innerHTML = "";
-            if (snap.empty) {
-                body.innerHTML = '<tr><td colspan="5" class="p-10 text-center">Tidak ada riwayat.</td></tr>';
-                return;
-            }
-            snap.forEach(docSnap => {
-                const d = docSnap.data();
-                const date = d.timestamp ? d.timestamp.toDate().toLocaleDateString('id-ID') : '-';
-                body.innerHTML += `
-                    <tr class="border-b border-slate-50 hover:bg-slate-50/50 transition-colors">
-                        <td class="p-6 font-bold text-slate-700">${date}</td>
-                        <td class="p-6"><span class="text-[10px] font-black bg-slate-100 px-2 py-1 rounded text-slate-500">${d.targetLabel}</span></td>
-                        <td class="p-6 font-bold text-emerald-600">${d.summary.energi} kkal</td>
-                        <td class="p-6 text-xs text-slate-400 italic">${d.catatan.substring(0,20)}...</td>
-                        <td class="p-6 text-center">
-                            <div class="flex justify-center gap-2">
-                                <button onclick="window.viewHistoryDetail('${docSnap.id}')" class="px-4 py-2 bg-slate-900 text-white rounded-xl text-[10px] font-bold hover:bg-black transition-all">DETAIL</button>
-                                <button onclick="window.deleteHistory('${docSnap.id}')" class="px-4 py-2 bg-red-50 text-red-500 rounded-xl text-[10px] font-bold hover:bg-red-500 hover:text-white transition-all">
-                                    <i class="fas fa-trash-alt"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                `;
+            body.innerHTML = snap.empty ? '<tr><td colspan="5" class="p-10 text-center">Kosong</td></tr>' : "";
+            snap.forEach(d => {
+                const data = d.data();
+                const date = data.timestamp ? data.timestamp.toDate().toLocaleDateString('id-ID') : '-';
+                body.innerHTML += `<tr class="border-b hover:bg-slate-50 transition-colors">
+                    <td class="p-6 font-bold text-slate-700">${date}</td>
+                    <td class="p-6 text-[10px] font-black text-slate-500">${data.targetLabel}</td>
+                    <td class="p-6 font-bold text-emerald-600">${data.summary.energi} kkal</td>
+                    <td class="p-6 text-xs text-slate-400 italic">${data.catatan.substring(0,20)}...</td>
+                    <td class="p-6 text-center flex justify-center gap-2">
+                        <button onclick="window.viewHistoryDetail('${d.id}')" class="px-4 py-2 bg-slate-900 text-white rounded-xl text-[10px] font-bold">DETAIL</button>
+                        <button onclick="window.deleteHistory('${d.id}')" class="px-4 py-2 bg-red-50 text-red-500 rounded-xl text-[10px] font-bold hover:bg-red-500 hover:text-white transition-all"><i class="fas fa-trash-alt"></i></button>
+                    </td>
+                </tr>`;
             });
         };
 
-        window.deleteHistory = async (id) => {
-            if (confirm("Hapus riwayat ini permanen?")) {
-                try {
+        window.deleteHistory = (id) => {
+            window.showModal({
+                title: "Hapus Riwayat?",
+                message: "Data ini akan dihapus permanen. Lanjutkan?",
+                type: "confirm",
+                onConfirm: async () => {
                     await deleteDoc(doc(db, "history", id));
-                    alert("Berhasil dihapus.");
                     window.loadHistory();
-                } catch (e) { alert("Gagal menghapus."); }
-            }
+                }
+            });
         };
 
         window.viewHistoryDetail = async (id) => {
@@ -347,62 +306,31 @@
                 document.getElementById('targetStatus').value = d.targetLabel;
                 d.items.forEach(item => {
                     const tr = document.createElement('tr');
-                    tr.innerHTML = `
-                        <td><input type="text" value="${item.nama}" class="in-nama font-bold text-slate-700"></td>
-                        <td><input type="number" value="${item.berat}" class="in-gram font-bold" oninput="window.hitungSemua()"></td>
-                        <td><input type="number" value="${item.energi}" class="v-energi" oninput="window.hitungSemua()"></td>
-                        <td><input type="number" value="${item.protein}" class="v-protein" oninput="window.hitungSemua()"></td>
-                        <td><input type="number" value="${item.lemak}" class="v-lemak" oninput="window.hitungSemua()"></td>
-                        <td><input type="number" value="${item.karbo}" class="v-karbo" oninput="window.hitungSemua()"></td>
-                        <td><input type="number" value="${item.serat}" class="v-serat" oninput="window.hitungSemua()"></td>
-                        <td><input type="number" value="${item.natrium}" class="v-natrium" oninput="window.hitungSemua()"></td>
-                        <td><input type="number" value="${item.vitA}" class="v-vitA" oninput="window.hitungSemua()"></td>
-                        <td><input type="number" value="${item.vitC}" class="v-vitC" oninput="window.hitungSemua()"></td>
-                        <td><input type="number" value="${item.besi}" class="v-besi" oninput="window.hitungSemua()"></td>
-                        <td class="no-print text-center"><button onclick="this.parentElement.parentElement.remove();window.hitungSemua()" class="text-slate-300 hover:text-red-500 transition-colors"><i class="fas fa-times-circle"></i></button></td>
-                    `;
+                    tr.innerHTML = `<td><input type="text" value="${item.nama}" class="in-nama font-bold"></td><td><input type="number" value="${item.berat}" class="in-gram font-bold" oninput="window.hitungSemua()"></td><td><input type="number" value="${item.energi}" class="v-energi" oninput="window.hitungSemua()"></td><td><input type="number" value="${item.protein}" class="v-protein" oninput="window.hitungSemua()"></td><td><input type="number" value="${item.lemak}" class="v-lemak" oninput="window.hitungSemua()"></td><td><input type="number" value="${item.karbo}" class="v-karbo" oninput="window.hitungSemua()"></td><td><input type="number" value="${item.serat}" class="v-serat" oninput="window.hitungSemua()"></td><td><input type="number" value="${item.natrium}" class="v-natrium" oninput="window.hitungSemua()"></td><td><input type="number" value="${item.vitA}" class="v-vitA" oninput="window.hitungSemua()"></td><td><input type="number" value="${item.vitC}" class="v-vitC" oninput="window.hitungSemua()"></td><td><input type="number" value="${item.besi}" class="v-besi" oninput="window.hitungSemua()"></td><td class="no-print text-center"><button onclick="this.parentElement.parentElement.remove();window.hitungSemua()" class="text-slate-300 hover:text-red-500"><i class="fas fa-times-circle"></i></button></td>`;
                     document.getElementById('badanTabel').appendChild(tr);
                 });
                 window.hitungSemua();
             }
         };
 
+        // --- CALC LOGIC ---
         const targetAKG = { "BALITA": { kal: 337.5, prot: 5, h_kal: 1350, h_prot: 20 }, "PAUD": { kal: 350, prot: 6.25, h_kal: 1400, h_prot: 25 }, "SD123": { kal: 495, prot: 12, h_kal: 1650, h_prot: 40 }, "SD456": { kal: 585, prot: 15.75, h_kal: 1950, h_prot: 52.5 }, "SMP": { kal: 667.5, prot: 20.25, h_kal: 2225, h_prot: 67.5 }, "SMA": { kal: 712.5, prot: 21, h_kal: 2375, h_prot: 70 }, "BUMIL": { kal: 753.9, prot: 23.4, h_kal: 2513, h_prot: 78 }, "BUSUI": { kal: 753.9, prot: 23.4, h_kal: 2513, h_prot: 78 } };
-
         window.tambahBaris = () => {
             const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td><input type="text" list="daftarBahan" placeholder="Cari bahan..." oninput="window.cariDatabase(this); window.autoFillGizi(this)" class="in-nama font-bold text-slate-700"></td>
-                <td><input type="number" class="in-gram font-bold" value="0" oninput="window.autoFillGizi(this.closest('tr').querySelector('.in-nama'))"></td>
-                <td><input type="number" step="0.01" class="v-energi" value="0" oninput="window.hitungSemua()"></td>
-                <td><input type="number" step="0.01" class="v-protein" value="0" oninput="window.hitungSemua()"></td>
-                <td><input type="number" step="0.01" class="v-lemak" value="0" oninput="window.hitungSemua()"></td>
-                <td><input type="number" step="0.01" class="v-karbo" value="0" oninput="window.hitungSemua()"></td>
-                <td><input type="number" step="0.01" class="v-serat" value="0" oninput="window.hitungSemua()"></td>
-                <td><input type="number" step="0.01" class="v-natrium" value="0" oninput="window.hitungSemua()"></td>
-                <td><input type="number" step="0.01" class="v-vitA" value="0" oninput="window.hitungSemua()"></td>
-                <td><input type="number" step="0.01" class="v-vitC" value="0" oninput="window.hitungSemua()"></td>
-                <td><input type="number" step="0.01" class="v-besi" value="0" oninput="window.hitungSemua()"></td>
-                <td class="no-print text-center"><button onclick="this.parentElement.parentElement.remove();window.hitungSemua()" class="text-slate-300 hover:text-red-500 transition-colors"><i class="fas fa-times-circle"></i></button></td>
-            `;
+            tr.innerHTML = `<td><input type="text" list="daftarBahan" oninput="window.cariDatabase(this); window.autoFillGizi(this)" class="in-nama font-bold"></td><td><input type="number" class="in-gram font-bold" value="0" oninput="window.autoFillGizi(this.closest('tr').querySelector('.in-nama'))"></td><td><input type="number" step="0.01" class="v-energi" value="0" oninput="window.hitungSemua()"></td><td><input type="number" step="0.01" class="v-protein" value="0" oninput="window.hitungSemua()"></td><td><input type="number" step="0.01" class="v-lemak" value="0" oninput="window.hitungSemua()"></td><td><input type="number" step="0.01" class="v-karbo" value="0" oninput="window.hitungSemua()"></td><td><input type="number" step="0.01" class="v-serat" value="0" oninput="window.hitungSemua()"></td><td><input type="number" step="0.01" class="v-natrium" value="0" oninput="window.hitungSemua()"></td><td><input type="number" step="0.01" class="v-vitA" value="0" oninput="window.hitungSemua()"></td><td><input type="number" step="0.01" class="v-vitC" value="0" oninput="window.hitungSemua()"></td><td><input type="number" step="0.01" class="v-besi" value="0" oninput="window.hitungSemua()"></td><td class="no-print text-center"><button onclick="this.parentElement.parentElement.remove();window.hitungSemua()" class="text-slate-300 hover:text-red-500"><i class="fas fa-times-circle"></i></button></td>`;
             document.getElementById('badanTabel').appendChild(tr);
         };
-
         window.hitungSemua = () => {
-            const fields = ['energi', 'protein', 'lemak', 'karbo', 'serat', 'natrium', 'vitA', 'vitC', 'besi'];
-            let total = {}; fields.forEach(f => total[f] = 0);
-            document.querySelectorAll('#badanTabel tr').forEach(row => {
-                fields.forEach(f => { total[f] += parseFloat(row.querySelector(`.v-${f}`).value) || 0; });
-            });
-            const target = targetAKG[document.getElementById('targetStatus').value];
-            document.getElementById('percent-energi').innerText = Math.round(total.energi / (target.h_kal || 2000) * 100) + "%";
-            document.getElementById('percent-protein').innerText = Math.round(total.protein / (target.h_prot || 50) * 100) + "%";
-            fields.forEach(f => { if(document.getElementById(`rep-${f}`)) document.getElementById(`rep-${f}`).innerText = total[f].toFixed(1); });
-            const list = document.getElementById('recom-list'); list.innerHTML = "";
-            if(total.energi < target.kal) list.innerHTML += `<li class="flex gap-2"><span>Tambah <b>±${Math.ceil((target.kal-total.energi)/1.8)}g Nasi</b>.</span></li>`;
+            const flds = ['energi','protein','lemak','karbo','serat','natrium','vitA','vitC','besi'];
+            let tot = {}; flds.forEach(f => tot[f] = 0);
+            document.querySelectorAll('#badanTabel tr').forEach(r => flds.forEach(f => tot[f] += parseFloat(r.querySelector('.v-'+f).value) || 0));
+            const tar = targetAKG[document.getElementById('targetStatus').value];
+            document.getElementById('percent-energi').innerText = Math.round(tot.energi / (tar.h_kal || 2000) * 100) + "%";
+            document.getElementById('percent-protein').innerText = Math.round(tot.protein / (tar.h_prot || 50) * 100) + "%";
+            flds.forEach(f => { if(document.getElementById('rep-'+f)) document.getElementById('rep-'+f').innerText = tot[f].toFixed(1); });
+            const list = document.getElementById('recom-list'); list.innerHTML = tot.energi < tar.kal ? `<li class="flex gap-2"><span>Tambah <b>±${Math.ceil((tar.kal-tot.energi)/1.8)}g Nasi</b>.</span></li>` : "";
             document.getElementById('recom-box').classList.toggle('hidden', list.innerHTML === "");
         };
-
         window.resetForm = () => { if(confirm("Hapus?")) { document.getElementById('badanTabel').innerHTML=""; window.tambahBaris(); window.hitungSemua(); } };
         window.tambahBaris();
     </script>
