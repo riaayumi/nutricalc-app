@@ -56,7 +56,10 @@
                     <p id="trial-info" class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Memuat status...</p>
                 </div>
             </div>
-            <div class="no-print">
+            <div class="no-print flex gap-3">
+                <button onclick="window.saveHistory()" id="btn-save" class="px-6 py-3 bg-emerald-600 text-white rounded-2xl font-bold text-sm shadow-xl shadow-emerald-100 hover:bg-emerald-700 transition-all flex items-center gap-2">
+                    <i class="fas fa-save"></i> Simpan Riwayat
+                </button>
                 <button onclick="window.print()" class="px-6 py-3 bg-slate-900 text-white rounded-2xl font-bold text-sm shadow-xl hover:bg-black transition-all flex items-center gap-2">
                     <i class="fas fa-print"></i> Cetak Laporan (PDF)
                 </button>
@@ -93,7 +96,7 @@
             <div class="bg-emerald-600 p-8 rounded-[2.5rem] text-white shadow-2xl shadow-emerald-200 relative overflow-hidden flex flex-col justify-center">
                 <div class="relative z-10">
                     <h4 class="text-emerald-200 text-[10px] font-black uppercase tracking-widest mb-2">Catatan Analis</h4>
-                    <div class="text-sm font-medium border-b border-emerald-400/50 pb-2 outline-none" contenteditable="true">Klik untuk menulis catatan...</div>
+                    <div id="catatan-analis" class="text-sm font-medium border-b border-emerald-400/50 pb-2 outline-none" contenteditable="true">Klik untuk menulis catatan...</div>
                 </div>
                 <i class="fas fa-file-medical absolute -bottom-4 -right-4 text-8xl text-emerald-500 opacity-20"></i>
             </div>
@@ -169,7 +172,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, collection, query, where, getDocs, limit } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, collection, query, where, getDocs, limit, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCaaCF_CQMftYWePC51dUWMRzndkZ-CW6o",
@@ -202,11 +205,10 @@
         // --- 2. LOGIKA DATABASE SEARCH (AUTOCOMPLETE) ---
         window.cariDatabase = async (input) => {
             const keyword = input.value.trim().toLowerCase();
-            if (keyword.length < 3) return; // Cari minimal 3 huruf
+            if (keyword.length < 3) return;
 
             try {
                 const foodRef = collection(db, "food_database");
-                // Mencari nama_search yang diawali dengan keyword
                 const q = query(foodRef, 
                     where("nama_search", ">=", keyword), 
                     where("nama_search", "<=", keyword + "\uf8ff"), 
@@ -243,7 +245,6 @@
                 };
 
                 for (let [cls, key] of Object.entries(mapping)) {
-                    // Kalibrasi nilai berdasarkan gram (data dasar adalah per 1g)
                     row.querySelector('.' + cls).value = (data[key] * gram).toFixed(2);
                 }
                 window.hitungSemua();
@@ -291,20 +292,16 @@
             });
 
             const target = targetAKG[document.getElementById('targetStatus').value];
-            
-            // Visual Persentase
             document.getElementById('percent-energi').innerText = Math.round(total.energi / target.h_kal * 100) + "%";
             document.getElementById('percent-protein').innerText = Math.round(total.protein / target.h_prot * 100) + "%";
             
-            // Detail Angka
             allFields.forEach(f => { if(document.getElementById(`rep-${f}`)) document.getElementById(`rep-${f}`).innerText = total[f].toFixed(1); });
 
-            // Rekomendasi Pintar
             const list = document.getElementById('recom-list');
             list.innerHTML = "";
             if(total.energi < target.kal) {
                 const nasi = Math.ceil((target.kal-total.energi)/1.8);
-                list.innerHTML += `<li class="flex gap-2"><i class="fas fa-check-circle text-emerald-500 mt-1"></i> <span>Tambah <b>±${nasi}g Nasi</b> untuk mencapai target energi.</span></li>`;
+                list.innerHTML += `<li class="flex gap-2"><i class="fas fa-check-circle text-emerald-500 mt-1"></i> <span>Tambah <b>±${nasi}g Nasi</b> untuk target energi.</span></li>`;
             }
             if(total.protein < target.prot) {
                 const lauk = Math.ceil((target.prot-total.protein)/0.27);
@@ -313,9 +310,59 @@
             document.getElementById('recom-box').classList.toggle('hidden', list.innerHTML === "");
         };
 
+        // --- 4. LOGIKA SIMPAN RIWAYAT ---
+        window.saveHistory = async () => {
+            const user = auth.currentUser;
+            if (!user) return alert("Sesi berakhir, silakan login ulang.");
+
+            const rows = document.querySelectorAll('#badanTabel tr');
+            if (rows.length === 0 || rows[0].querySelector('.v-energi').value == 0) {
+                return alert("Tabel masih kosong!");
+            }
+
+            const btn = document.getElementById('btn-save');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
+
+            // Ambil data dari tabel
+            const dataMakanan = [];
+            rows.forEach(row => {
+                dataMakanan.push({
+                    nama: row.querySelector('.in-nama').value,
+                    berat: row.querySelector('.in-gram').value,
+                    energi: row.querySelector('.v-energi').value,
+                    protein: row.querySelector('.v-protein').value
+                });
+            });
+
+            // Siapkan Dokumen
+            const docData = {
+                userId: user.uid,
+                timestamp: serverTimestamp(),
+                targetLabel: document.getElementById('targetStatus').value,
+                catatan: document.getElementById('catatan-analis').innerText,
+                summary: {
+                    energi: document.getElementById('rep-energi').innerText,
+                    protein: document.getElementById('rep-protein').innerText,
+                    percentEnergi: document.getElementById('percent-energi').innerText
+                },
+                items: dataMakanan
+            };
+
+            try {
+                await addDoc(collection(db, "history"), docData);
+                alert("Analisis berhasil disimpan ke Riwayat!");
+            } catch (e) {
+                console.error(e);
+                alert("Gagal menyimpan ke cloud.");
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-save"></i> Simpan Riwayat';
+            }
+        };
+
         window.resetForm = () => { if(confirm("Hapus semua data tabel?")) { document.getElementById('badanTabel').innerHTML=""; window.tambahBaris(); window.hitungSemua(); } };
 
-        // Start
         window.tambahBaris();
     </script>
 </body>
