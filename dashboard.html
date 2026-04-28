@@ -9,21 +9,22 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
-        .nav-active { background: rgba(16, 185, 129, 0.1); color: #10b981; border-right: 4px solid #10b981; }
-        .in-nama { text-align: left !important; min-width: 180px; }
+        .nav-active { background: #ecfdf5; color: #059669; border-right: 4px solid #10b981; }
+        .in-nama { text-align: left !important; min-width: 200px; }
         input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
         
         /* Table Styling */
-        .gizi-table th { font-size: 9px; text-transform: uppercase; letter-spacing: 0.05em; padding: 12px 4px; background: #f1f5f9; color: #64748b; border: 1px solid #e2e8f0; }
-        .gizi-table td { border: 1px solid #e2e8f0; padding: 4px; }
-        .gizi-table input { width: 100%; border: none; background: transparent; text-align: center; font-size: 12px; padding: 8px 4px; outline: none; }
-        .gizi-table input:focus { background: #f0fdf4; }
+        .gizi-table th { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; padding: 15px 8px; background: #fdfdfd; color: #94a3b8; border-bottom: 2px solid #f1f5f9; }
+        .gizi-table td { padding: 10px 8px; border-bottom: 1px solid #f1f5f9; }
+        .gizi-table input { width: 100%; border: 1px solid transparent; background: transparent; text-align: center; font-size: 13px; padding: 8px; border-radius: 8px; transition: all 0.2s; }
+        .gizi-table input:focus { background: #fff; border-color: #10b981; box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1); outline: none; }
+        .gizi-table tr:hover { background-color: #f8fafc; }
 
         @media print {
             .no-print { display: none !important; }
             body { background: white; padding: 0; }
-            .print-container { width: 100%; max-width: 100%; margin: 0; padding: 20px; box-shadow: none; border: none; }
-            .gizi-table th, .gizi-table td { border: 1px solid #000 !important; color: black !important; }
+            .print-container { width: 100%; max-width: 100%; margin: 0; padding: 10px; }
+            .gizi-table th, .gizi-table td { border: 1px solid #e2e8f0 !important; font-size: 9px !important; }
         }
     </style>
 </head>
@@ -31,127 +32,137 @@
 
     <aside class="w-64 bg-white border-r border-slate-200 hidden md:flex flex-col z-20 no-print">
         <div class="p-8 flex items-center gap-3">
-            <svg width="32" height="32" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="40" height="40" rx="10" fill="#10b981"/><path d="M20 10V30M10 20H30" stroke="white" stroke-width="4" stroke-linecap="round"/></svg>
-            <span class="text-xl font-bold text-slate-800">NutriCalc</span>
+            <svg width="32" height="32" viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="10" fill="#10b981"/><path d="M20 10V30M10 20H30" stroke="white" stroke-width="4" stroke-linecap="round"/></svg>
+            <span class="text-xl font-extrabold text-slate-800 tracking-tighter">NutriCalc</span>
         </div>
         <nav class="flex-grow px-4 space-y-2 mt-4">
-            <a href="#" class="nav-active flex items-center gap-3 px-4 py-3 rounded-xl font-bold"><i class="fas fa-calculator w-5"></i> Kalkulator Gizi</a>
-            <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500 font-medium hover:bg-slate-50 transition-all"><i class="fas fa-history w-5"></i> Riwayat</a>
-            <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500 font-medium hover:bg-slate-50 transition-all"><i class="fas fa-database w-5"></i> Database</a>
+            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest px-4 mb-4">Menu Utama</p>
+            <a href="#" class="nav-active flex items-center gap-3 px-4 py-3.5 rounded-2xl font-bold transition-all"><i class="fas fa-calculator w-5"></i> Kalkulator Gizi</a>
+            <a href="#" class="flex items-center gap-3 px-4 py-3.5 rounded-2xl text-slate-500 font-semibold hover:bg-slate-50 transition-all"><i class="fas fa-folder-open w-5"></i> Riwayat Pasien</a>
+            <a href="#" class="flex items-center gap-3 px-4 py-3.5 rounded-2xl text-slate-500 font-semibold hover:bg-slate-50 transition-all"><i class="fas fa-book-medical w-5"></i> Database Gizi</a>
         </nav>
         <div class="p-6 border-t border-slate-100">
-            <button onclick="window.logout()" class="w-full py-3 rounded-xl text-sm font-bold text-red-500 hover:bg-red-50 transition-all"><i class="fas fa-sign-out-alt mr-2"></i> Keluar</button>
+            <button onclick="window.logout()" class="w-full py-3.5 rounded-2xl text-sm font-bold text-red-500 hover:bg-red-50 transition-all flex items-center justify-center gap-2"><i class="fas fa-sign-out-alt"></i> Keluar</button>
         </div>
     </aside>
 
-    <main class="flex-grow p-6 md:p-10 print-container">
+    <main class="flex-grow p-6 md:p-10 print-container overflow-y-auto">
         
         <div class="flex flex-col md:flex-row justify-between items-start mb-10 gap-6">
             <div>
-                <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">ANALISIS KANDUNGAN GIZI</h1>
-                <div class="mt-2 text-sm text-slate-400 font-medium border-b border-dashed border-slate-300 pb-1 outline-none min-w-[200px]" contenteditable="true">Klik untuk tulis catatan laporan...</div>
+                <h1 class="text-3xl font-black text-slate-900 tracking-tight">Halo, <span id="user-display-name" class="text-emerald-600">Dokter</span>!</h1>
+                <div class="mt-2 flex items-center gap-3 no-print">
+                    <div id="status-badge" class="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest bg-emerald-500 text-white shadow-lg shadow-emerald-100">Trial Mode</div>
+                    <p id="trial-info" class="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">Memuat status langganan...</p>
+                </div>
             </div>
-            <div class="flex flex-col items-end gap-2 no-print">
-                <div id="status-badge" class="px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest bg-emerald-500 text-white shadow-lg shadow-emerald-100">Trial Mode</div>
-                <p id="trial-info" class="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">Memuat status...</p>
+            <div class="no-print">
+                <button onclick="window.print()" class="px-6 py-3 bg-slate-900 text-white rounded-2xl font-bold text-sm shadow-xl shadow-slate-200 hover:bg-black transition-all flex items-center gap-2">
+                    <i class="fas fa-print"></i> Cetak Laporan PDF
+                </button>
             </div>
         </div>
 
-        <div class="grid md:grid-cols-2 gap-6 mb-8 no-print">
-            <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
-                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">Target Status AKG</label>
-                <select id="targetStatus" onchange="hitungSemua()" class="w-full px-5 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:border-emerald-500 font-semibold text-slate-700">
-                    <option value="BALITA">BALITA (Target: 337.5 kkal)</option>
-                    <option value="PAUD">PAUD/TK (Target: 350 kkal)</option>
-                    <option value="SD123">SD123 (Target: 495 kkal)</option>
-                    <option value="SD456">SD456 (Target: 585 kkal)</option>
-                    <option value="SMP">SMP/MTS (Target: 667.5 kkal)</option>
-                    <option value="SMA">SMA/SMK (Target: 712.5 kkal)</option>
-                    <option value="BUMIL">BUMIL (Target: 753.9 kkal)</option>
-                    <option value="BUSUI">BUSUI (Target: 753.9 kkal)</option>
-                </select>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10 no-print">
+            <div class="lg:col-span-2 bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm flex flex-col md:flex-row items-center justify-between gap-8">
+                <div class="w-full">
+                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Target Rekomendasi Gizi</label>
+                    <select id="targetStatus" onchange="window.hitungSemua()" class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:border-emerald-500 font-bold text-slate-700 appearance-none cursor-pointer transition-all">
+                        <option value="BALITA">BALITA (Target: 337.5 kkal)</option>
+                        <option value="PAUD">PAUD/TK (Target: 350 kkal)</option>
+                        <option value="SD123">SD123 (Target: 495 kkal)</option>
+                        <option value="SD456">SD456 (Target: 585 kkal)</option>
+                        <option value="SMP">SMP/MTS (Target: 667.5 kkal)</option>
+                        <option value="SMA">SMA/SMK (Target: 712.5 kkal)</option>
+                        <option value="BUMIL">BUMIL (Target: 753.9 kkal)</option>
+                        <option value="BUSUI">BUSUI (Target: 753.9 kkal)</option>
+                    </select>
+                </div>
+                <div class="flex gap-4 w-full md:w-auto">
+                    <div class="text-center bg-emerald-50 p-6 rounded-[2rem] min-w-[120px]">
+                        <p class="text-[9px] font-black text-emerald-600 uppercase mb-2">Energi</p>
+                        <h2 class="text-2xl font-black text-emerald-700" id="percent-energi">0%</h2>
+                    </div>
+                    <div class="text-center bg-blue-50 p-6 rounded-[2rem] min-w-[120px]">
+                        <p class="text-[9px] font-black text-blue-600 uppercase mb-2">Protein</p>
+                        <h2 class="text-2xl font-black text-blue-700" id="percent-protein">0%</h2>
+                    </div>
+                </div>
             </div>
-            <div class="bg-emerald-600 p-6 rounded-3xl shadow-xl shadow-emerald-100 flex items-center justify-between text-white">
-                <div>
-                    <p class="text-[10px] font-black uppercase tracking-widest opacity-80 mb-1">Kontribusi Energi</p>
-                    <h2 class="text-3xl font-black" id="percent-energi">0%</h2>
+            
+            <div class="bg-emerald-600 p-8 rounded-[2.5rem] text-white shadow-2xl shadow-emerald-200 relative overflow-hidden flex flex-col justify-center">
+                <div class="relative z-10">
+                    <h4 class="text-emerald-200 text-xs font-bold uppercase tracking-widest mb-2">Catatan Analis</h4>
+                    <div class="text-sm font-medium border-b border-emerald-400/50 pb-2 outline-none" contenteditable="true">Tulis diagnosa awal di sini...</div>
                 </div>
-                <div class="text-right">
-                    <p class="text-[10px] font-black uppercase tracking-widest opacity-80 mb-1">Kontribusi Protein</p>
-                    <h2 class="text-3xl font-black" id="percent-protein">0%</h2>
-                </div>
+                <i class="fas fa-file-medical absolute -bottom-4 -right-4 text-8xl text-emerald-500 opacity-20"></i>
             </div>
         </div>
 
-        <div class="bg-white rounded-[2.5rem] shadow-xl shadow-slate-200/50 border border-white overflow-hidden mb-10">
+        <div class="bg-white rounded-[2.5rem] shadow-xl shadow-slate-200/40 border border-white overflow-hidden mb-10">
+            <div class="p-6 border-b border-slate-50 flex justify-between items-center no-print">
+                <h3 class="font-bold text-slate-800 flex items-center gap-2"><i class="fas fa-list text-emerald-500"></i> Rincian Bahan Pangan</h3>
+                <button onclick="window.tambahBaris()" class="text-sm font-bold text-emerald-600 hover:text-emerald-700 transition-all"><i class="fas fa-plus-circle"></i> Tambah Bahan Baru</button>
+            </div>
             <div class="overflow-x-auto">
                 <table class="w-full gizi-table">
                     <thead>
                         <tr>
                             <th class="in-nama">Bahan Makanan</th>
-                            <th style="width:70px">Berat<span>(g)</span></th>
+                            <th style="width:80px">Berat<span>(g)</span></th>
                             <th>Energi<span>(kkal)</span></th>
                             <th>Prot<span>(g)</span></th>
-                            <th>Lemak<span>(g)</span></th>
-                            <th>Karbo<span>(g)</span></th>
-                            <th>Serat<span>(g)</span></th>
-                            <th>Gula<span>(g)</span></th>
+                            <th>Lmk<span>(g)</span></th>
+                            <th>Krb<span>(g)</span></th>
+                            <th>Srt<span>(g)</span></th>
                             <th>Na<span>(mg)</span></th>
-                            <th>Vit A<span>(mcg)</span></th>
-                            <th>Vit C<span>(mg)</span></th>
-                            <th>F.E<span>(mg)</span></th>
+                            <th>Vit A</th>
+                            <th>Vit C</th>
+                            <th>Besi</th>
                             <th class="no-print"></th>
                         </tr>
                     </thead>
                     <tbody id="badanTabel"></tbody>
                 </table>
             </div>
-            
-            <div class="p-6 bg-slate-50 flex flex-wrap gap-4 no-print border-t border-slate-100">
-                <button onclick="tambahBaris()" class="px-6 py-3 bg-emerald-600 text-white rounded-xl font-bold text-sm shadow-lg shadow-emerald-100 hover:bg-emerald-700 transition-all"><i class="fas fa-plus mr-2"></i> Tambah Bahan</button>
-                <button onclick="resetForm()" class="px-6 py-3 bg-white border border-slate-200 text-slate-500 rounded-xl font-bold text-sm hover:bg-slate-100 transition-all">Reset</button>
-                <button onclick="window.print()" class="px-8 py-3 bg-slate-900 text-white rounded-xl font-bold text-sm shadow-lg ml-auto hover:bg-black transition-all"><i class="fas fa-print mr-2"></i> Cetak Laporan PDF</button>
+            <div class="p-8 bg-slate-50/50 flex justify-end no-print">
+                <button onclick="window.resetForm()" class="text-xs font-bold text-red-400 hover:text-red-600 transition-all uppercase tracking-widest"><i class="fas fa-undo mr-1"></i> Reset Seluruh Tabel</button>
             </div>
         </div>
 
         <div class="grid lg:grid-cols-3 gap-8">
-            <div class="lg:col-span-2 bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm">
-                <h3 class="text-sm font-black text-slate-800 uppercase tracking-widest mb-6 flex items-center gap-2">
-                    <span class="w-2 h-6 bg-emerald-500 rounded-full"></span>
-                    Detail Capaian AKG (<span id="label-target">BALITA</span>)
-                </h3>
-                <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
-                    <div class="bg-slate-50 p-4 rounded-2xl">
-                        <p class="text-[9px] font-black text-slate-400 uppercase mb-2">Energi</p>
-                        <p class="text-sm font-bold text-slate-700"><span id="rep-energi">0</span> / <span id="tar-energi">0</span></p>
+            <div class="lg:col-span-2 bg-white p-10 rounded-[3rem] border border-slate-100 shadow-sm">
+                <h3 class="text-xs font-black text-slate-400 uppercase tracking-[0.2em] mb-8">Hasil Capaian Nutrisi Detil</h3>
+                <div class="grid grid-cols-2 md:grid-cols-5 gap-6 text-center">
+                    <div class="space-y-1">
+                        <p class="text-[9px] font-black text-slate-400 uppercase">Energi</p>
+                        <p class="text-base font-bold text-slate-700"><span id="rep-energi">0</span><span class="text-[10px] text-slate-300 ml-1">kcal</span></p>
                     </div>
-                    <div class="bg-slate-50 p-4 rounded-2xl">
-                        <p class="text-[9px] font-black text-slate-400 uppercase mb-2">Protein</p>
-                        <p class="text-sm font-bold text-slate-700"><span id="rep-protein">0</span> / <span id="tar-protein">0</span></p>
+                    <div class="space-y-1">
+                        <p class="text-[9px] font-black text-slate-400 uppercase">Protein</p>
+                        <p class="text-base font-bold text-slate-700"><span id="rep-protein">0</span><span class="text-[10px] text-slate-300 ml-1">g</span></p>
                     </div>
-                    <div class="bg-slate-50 p-4 rounded-2xl">
-                        <p class="text-[9px] font-black text-slate-400 uppercase mb-2">Lemak</p>
-                        <p class="text-sm font-bold text-slate-700"><span id="rep-lemak">0</span> / <span id="tar-lemak">0</span></p>
+                    <div class="space-y-1">
+                        <p class="text-[9px] font-black text-slate-400 uppercase">Lemak</p>
+                        <p class="text-base font-bold text-slate-700"><span id="rep-lemak">0</span><span class="text-[10px] text-slate-300 ml-1">g</span></p>
                     </div>
-                    <div class="bg-slate-50 p-4 rounded-2xl">
-                        <p class="text-[9px] font-black text-slate-400 uppercase mb-2">Karbo</p>
-                        <p class="text-sm font-bold text-slate-700"><span id="rep-karbo">0</span> / <span id="tar-karbo">0</span></p>
+                    <div class="space-y-1">
+                        <p class="text-[9px] font-black text-slate-400 uppercase">Karbo</p>
+                        <p class="text-base font-bold text-slate-700"><span id="rep-karbo">0</span><span class="text-[10px] text-slate-300 ml-1">g</span></p>
                     </div>
-                    <div class="bg-slate-50 p-4 rounded-2xl">
-                        <p class="text-[9px] font-black text-slate-400 uppercase mb-2">Serat</p>
-                        <p class="text-sm font-bold text-slate-700"><span id="rep-serat">0</span> / <span id="tar-serat">0</span></p>
+                    <div class="space-y-1">
+                        <p class="text-[9px] font-black text-slate-400 uppercase">Serat</p>
+                        <p class="text-base font-bold text-slate-700"><span id="rep-serat">0</span><span class="text-[10px] text-slate-300 ml-1">g</span></p>
                     </div>
                 </div>
             </div>
 
-            <div id="recom-box" class="bg-orange-50 border border-orange-100 p-8 rounded-[2.5rem] hidden">
-                <h4 class="text-orange-700 font-bold text-sm mb-4 flex items-center gap-2"><i class="fas fa-lightbulb"></i> Rekomendasi Gizi</h4>
-                <ul id="recom-list" class="text-xs text-orange-600 space-y-3 font-medium leading-relaxed"></ul>
+            <div id="recom-box" class="bg-white border border-emerald-100 p-10 rounded-[3rem] shadow-xl shadow-emerald-50 hidden">
+                <h4 class="text-emerald-700 font-black text-xs uppercase tracking-widest mb-6 flex items-center gap-2"><i class="fas fa-lightbulb"></i> Rekomendasi</h4>
+                <ul id="recom-list" class="text-xs text-slate-600 space-y-4 font-medium"></ul>
             </div>
         </div>
     </main>
-
-    <datalist id="daftarBahan"></datalist>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
@@ -171,20 +182,22 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // --- AUTH LOGIC ---
+        // --- Auth Logic ---
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 const userDoc = await getDoc(doc(db, "users", user.uid));
                 if (userDoc.exists()) {
                     const data = userDoc.data();
-                    document.getElementById('trial-info').innerText = `Masa Trial: ${Math.ceil((data.trialExpired - Date.now()) / (1000*60*60*24))} Hari Lagi`;
+                    document.getElementById('user-display-name').innerText = data.nama.split(' ')[0];
+                    const diff = data.trialExpired - Date.now();
+                    document.getElementById('trial-info').innerText = diff > 0 ? `Trial: ${Math.ceil(diff/(1000*60*60*24))} Hari Lagi` : "Trial Habis";
                 }
             } else { window.location.href = "login.html"; }
         });
 
-        window.logout = () => signOut(auth);
+        window.logout = () => signOut(auth).then(() => window.location.href="login.html");
 
-        // --- KALKULATOR LOGIC (LOGIKA ASLI ANDA) ---
+        // --- Calculator Data ---
         const targetAKG = {
             "BALITA": { kal: 337.5, prot: 5, lemak: 11.25, karbo: 50, serat: 3.7, h_kal: 1350, h_prot: 20, h_lemak: 45, h_karbo: 200, h_serat: 15 },
             "PAUD":  { kal: 350,   prot: 6.25, lemak: 12.5, karbo: 55,    serat: 3.7, h_kal: 1400, h_prot: 25,  h_lemak: 50,  h_karbo: 220, h_serat: 15 },
@@ -199,77 +212,50 @@
         window.tambahBaris = () => {
             const tr = document.createElement('tr');
             tr.innerHTML = `
-                <td><input type="text" list="daftarBahan" class="in-nama font-bold text-slate-700"></td>
+                <td><input type="text" placeholder="Nama bahan..." class="in-nama font-bold text-slate-700"></td>
                 <td><input type="number" class="in-gram font-bold" value="0" oninput="window.hitungSemua()"></td>
-                <td><input type="number" step="0.1" class="v-energi" value="0" oninput="window.hitungSemua()"></td>
-                <td><input type="number" step="0.1" class="v-protein" value="0" oninput="window.hitungSemua()"></td>
-                <td><input type="number" step="0.1" class="v-lemak" value="0" oninput="window.hitungSemua()"></td>
-                <td><input type="number" step="0.1" class="v-karbo" value="0" oninput="window.hitungSemua()"></td>
-                <td><input type="number" step="0.1" class="v-serat" value="0" oninput="window.hitungSemua()"></td>
-                <td><input type="number" step="0.1" class="v-gula" value="0" oninput="window.hitungSemua()"></td>
-                <td><input type="number" step="0.1" class="v-natrium" value="0" oninput="window.hitungSemua()"></td>
-                <td><input type="number" step="0.1" class="v-vitA" value="0" oninput="window.hitungSemua()"></td>
-                <td><input type="number" step="0.1" class="v-vitC" value="0" oninput="window.hitungSemua()"></td>
-                <td><input type="number" step="0.1" class="v-besi" value="0" oninput="window.hitungSemua()"></td>
-                <td class="no-print text-center"><button onclick="this.parentElement.parentElement.remove();window.hitungSemua()" class="text-slate-300 hover:text-red-500 transition-colors"><i class="fas fa-trash-alt"></i></button></td>
+                <td><input type="number" class="v-energi" value="0" oninput="window.hitungSemua()"></td>
+                <td><input type="number" class="v-protein" value="0" oninput="window.hitungSemua()"></td>
+                <td><input type="number" class="v-lemak" value="0" oninput="window.hitungSemua()"></td>
+                <td><input type="number" class="v-karbo" value="0" oninput="window.hitungSemua()"></td>
+                <td><input type="number" class="v-serat" value="0" oninput="window.hitungSemua()"></td>
+                <td><input type="number" class="v-natrium" value="0" oninput="window.hitungSemua()"></td>
+                <td><input type="number" class="v-vitA" value="0" oninput="window.hitungSemua()"></td>
+                <td><input type="number" class="v-vitC" value="0" oninput="window.hitungSemua()"></td>
+                <td><input type="number" class="v-besi" value="0" oninput="window.hitungSemua()"></td>
+                <td class="no-print text-center"><button onclick="this.parentElement.parentElement.remove();window.hitungSemua()" class="text-slate-300 hover:text-red-500 transition-colors"><i class="fas fa-times-circle"></i></button></td>
             `;
             document.getElementById('badanTabel').appendChild(tr);
         };
 
         window.hitungSemua = () => {
-            const fields = ['energi', 'protein', 'lemak', 'karbo', 'serat', 'gula', 'natrium', 'vitA', 'vitC', 'besi'];
+            const fields = ['energi', 'protein', 'lemak', 'karbo', 'serat'];
+            const allFields = ['energi', 'protein', 'lemak', 'karbo', 'serat', 'natrium', 'vitA', 'vitC', 'besi'];
             let total = {};
-            fields.forEach(f => total[f] = 0);
+            allFields.forEach(f => total[f] = 0);
             
             document.querySelectorAll('#badanTabel tr').forEach(row => {
-                fields.forEach(f => {
-                    total[f] += parseFloat(row.querySelector(`.v-${f}`).value) || 0;
-                });
+                allFields.forEach(f => { total[f] += parseFloat(row.querySelector(`.v-${f}`).value) || 0; });
             });
 
-            const targetKey = document.getElementById('targetStatus').value;
-            const target = targetAKG[targetKey];
+            const target = targetAKG[document.getElementById('targetStatus').value];
             
-            // Update Summary
-            document.getElementById('percent-energi').innerText = (total.energi / target.h_kal * 100).toFixed(1) + "%";
-            document.getElementById('percent-protein').innerText = (total.protein / target.h_prot * 100).toFixed(1) + "%";
+            // Visual Update
+            document.getElementById('percent-energi').innerText = Math.round(total.energi / target.h_kal * 100) + "%";
+            document.getElementById('percent-protein').innerText = Math.round(total.protein / target.h_prot * 100) + "%";
             
-            // Update Grid Detail
-            document.getElementById('label-target').innerText = targetKey;
-            document.getElementById('rep-energi').innerText = total.energi.toFixed(1);
-            document.getElementById('tar-energi').innerText = target.kal;
-            document.getElementById('rep-protein').innerText = total.protein.toFixed(1);
-            document.getElementById('tar-protein').innerText = target.prot;
-            document.getElementById('rep-lemak').innerText = total.lemak.toFixed(1);
-            document.getElementById('tar-lemak').innerText = target.lemak;
-            document.getElementById('rep-karbo').innerText = total.karbo.toFixed(1);
-            document.getElementById('tar-karbo').innerText = target.karbo;
-            document.getElementById('rep-serat').innerText = total.serat.toFixed(1);
-            document.getElementById('tar-serat').innerText = target.serat;
+            allFields.forEach(f => { if(document.getElementById(`rep-${f}`)) document.getElementById(`rep-${f}`).innerText = total[f].toFixed(1); });
 
-            updateRekomendasi(total, target);
+            // Rekomendasi
+            const list = document.getElementById('recom-list');
+            list.innerHTML = "";
+            if(total.energi < target.kal) {
+                list.innerHTML += `<li class="flex gap-2"><i class="fas fa-arrow-up text-emerald-500"></i> Tambah ±${Math.ceil((target.kal-total.energi)/1.8)}g Nasi untuk energi.</li>`;
+            }
+            document.getElementById('recom-box').classList.toggle('hidden', list.innerHTML === "");
         };
 
-        function updateRekomendasi(total, target) {
-            const recomBox = document.getElementById('recom-box');
-            const recomList = document.getElementById('recom-list');
-            recomList.innerHTML = '';
-            let hasRecom = false;
-
-            if (total.energi < target.kal) {
-                const nasi = Math.ceil((target.kal - total.energi) / 1.8);
-                recomList.innerHTML += `<li><i class="fas fa-check-circle mr-2"></i> Tambah ±${nasi}g Nasi untuk energi.</li>`;
-                hasRecom = true;
-            }
-            if (total.protein < target.prot) {
-                const ayam = Math.ceil((target.prot - total.protein) / 0.27);
-                recomList.innerHTML += `<li><i class="fas fa-check-circle mr-2"></i> Tambah ±${ayam}g Lauk Pauk untuk protein.</li>`;
-                hasRecom = true;
-            }
-            recomBox.classList.toggle('hidden', !hasRecom);
-        }
-
-        window.resetForm = () => { if(confirm("Reset semua data?")) { document.getElementById('badanTabel').innerHTML = ''; window.tambahBaris(); window.hitungSemua(); }};
+        window.resetForm = () => { if(confirm("Hapus semua?")) { document.getElementById('badanTabel').innerHTML=""; window.tambahBaris(); window.hitungSemua(); } };
 
         window.tambahBaris();
     </script>
