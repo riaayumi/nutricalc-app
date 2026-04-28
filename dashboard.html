@@ -15,7 +15,7 @@
         
         /* Table Styling */
         .gizi-table th { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; padding: 15px 8px; background: #fdfdfd; color: #94a3b8; border-bottom: 2px solid #f1f5f9; }
-        .gizi-table td { padding: 10px 8px; border-bottom: 1px solid #f1f5f9; }
+        .gizi-table td { padding: 10px 8px; border-bottom: 1px solid #f1f5f9; position: relative; }
         .gizi-table input { width: 100%; border: 1px solid transparent; background: transparent; text-align: center; font-size: 13px; padding: 8px; border-radius: 8px; transition: all 0.2s; }
         .gizi-table input:focus { background: #fff; border-color: #10b981; box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1); outline: none; }
         .gizi-table tr:hover { background-color: #f8fafc; }
@@ -28,7 +28,7 @@
         }
     </style>
 </head>
-<body class="flex min-h-screen">
+<body class="flex min-h-screen text-slate-800">
 
     <aside class="w-64 bg-white border-r border-slate-200 hidden md:flex flex-col z-20 no-print">
         <div class="p-8 flex items-center gap-3">
@@ -50,15 +50,15 @@
         
         <div class="flex flex-col md:flex-row justify-between items-start mb-10 gap-6">
             <div>
-                <h1 class="text-3xl font-black text-slate-900 tracking-tight">Halo, <span id="user-display-name" class="text-emerald-600">Dokter</span>!</h1>
+                <h1 class="text-3xl font-black text-slate-900 tracking-tight">Halo, <span id="user-display-name" class="text-emerald-600">...</span>!</h1>
                 <div class="mt-2 flex items-center gap-3 no-print">
-                    <div id="status-badge" class="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest bg-emerald-500 text-white shadow-lg shadow-emerald-100">Trial Mode</div>
-                    <p id="trial-info" class="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">Memuat status langganan...</p>
+                    <div id="status-badge" class="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest bg-emerald-500 text-white shadow-lg shadow-emerald-100 italic">Trial Mode</div>
+                    <p id="trial-info" class="text-[10px] font-bold text-slate-400 uppercase tracking-tighter tracking-widest">Memuat status...</p>
                 </div>
             </div>
             <div class="no-print">
-                <button onclick="window.print()" class="px-6 py-3 bg-slate-900 text-white rounded-2xl font-bold text-sm shadow-xl shadow-slate-200 hover:bg-black transition-all flex items-center gap-2">
-                    <i class="fas fa-print"></i> Cetak Laporan PDF
+                <button onclick="window.print()" class="px-6 py-3 bg-slate-900 text-white rounded-2xl font-bold text-sm shadow-xl hover:bg-black transition-all flex items-center gap-2">
+                    <i class="fas fa-print"></i> Cetak Laporan (PDF)
                 </button>
             </div>
         </div>
@@ -67,7 +67,7 @@
             <div class="lg:col-span-2 bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm flex flex-col md:flex-row items-center justify-between gap-8">
                 <div class="w-full">
                     <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Target Rekomendasi Gizi</label>
-                    <select id="targetStatus" onchange="window.hitungSemua()" class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:border-emerald-500 font-bold text-slate-700 appearance-none cursor-pointer transition-all">
+                    <select id="targetStatus" onchange="window.hitungSemua()" class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:border-emerald-500 font-bold text-slate-700 appearance-none cursor-pointer">
                         <option value="BALITA">BALITA (Target: 337.5 kkal)</option>
                         <option value="PAUD">PAUD/TK (Target: 350 kkal)</option>
                         <option value="SD123">SD123 (Target: 495 kkal)</option>
@@ -92,8 +92,8 @@
             
             <div class="bg-emerald-600 p-8 rounded-[2.5rem] text-white shadow-2xl shadow-emerald-200 relative overflow-hidden flex flex-col justify-center">
                 <div class="relative z-10">
-                    <h4 class="text-emerald-200 text-xs font-bold uppercase tracking-widest mb-2">Catatan Analis</h4>
-                    <div class="text-sm font-medium border-b border-emerald-400/50 pb-2 outline-none" contenteditable="true">Tulis diagnosa awal di sini...</div>
+                    <h4 class="text-emerald-200 text-[10px] font-black uppercase tracking-widest mb-2">Catatan Analis</h4>
+                    <div class="text-sm font-medium border-b border-emerald-400/50 pb-2 outline-none" contenteditable="true">Klik untuk menulis catatan...</div>
                 </div>
                 <i class="fas fa-file-medical absolute -bottom-4 -right-4 text-8xl text-emerald-500 opacity-20"></i>
             </div>
@@ -101,8 +101,8 @@
 
         <div class="bg-white rounded-[2.5rem] shadow-xl shadow-slate-200/40 border border-white overflow-hidden mb-10">
             <div class="p-6 border-b border-slate-50 flex justify-between items-center no-print">
-                <h3 class="font-bold text-slate-800 flex items-center gap-2"><i class="fas fa-list text-emerald-500"></i> Rincian Bahan Pangan</h3>
-                <button onclick="window.tambahBaris()" class="text-sm font-bold text-emerald-600 hover:text-emerald-700 transition-all"><i class="fas fa-plus-circle"></i> Tambah Bahan Baru</button>
+                <h3 class="font-bold text-slate-800 flex items-center gap-2 text-sm uppercase tracking-widest"><i class="fas fa-list text-emerald-500"></i> Rincian Bahan Pangan</h3>
+                <button onclick="window.tambahBaris()" class="text-xs font-black uppercase tracking-widest text-emerald-600 hover:text-emerald-700 transition-all"><i class="fas fa-plus-circle mr-1"></i> Tambah Bahan</button>
             </div>
             <div class="overflow-x-auto">
                 <table class="w-full gizi-table">
@@ -110,12 +110,12 @@
                         <tr>
                             <th class="in-nama">Bahan Makanan</th>
                             <th style="width:80px">Berat<span>(g)</span></th>
-                            <th>Energi<span>(kkal)</span></th>
-                            <th>Prot<span>(g)</span></th>
-                            <th>Lmk<span>(g)</span></th>
-                            <th>Krb<span>(g)</span></th>
-                            <th>Srt<span>(g)</span></th>
-                            <th>Na<span>(mg)</span></th>
+                            <th>Energi</th>
+                            <th>Prot</th>
+                            <th>Lmk</th>
+                            <th>Krb</th>
+                            <th>Srt</th>
+                            <th>Na</th>
                             <th>Vit A</th>
                             <th>Vit C</th>
                             <th>Besi</th>
@@ -125,14 +125,14 @@
                     <tbody id="badanTabel"></tbody>
                 </table>
             </div>
-            <div class="p-8 bg-slate-50/50 flex justify-end no-print">
-                <button onclick="window.resetForm()" class="text-xs font-bold text-red-400 hover:text-red-600 transition-all uppercase tracking-widest"><i class="fas fa-undo mr-1"></i> Reset Seluruh Tabel</button>
+            <div class="p-6 bg-slate-50/50 flex justify-end no-print">
+                <button onclick="window.resetForm()" class="text-[10px] font-black text-red-400 hover:text-red-600 transition-all uppercase tracking-widest"><i class="fas fa-undo mr-1"></i> Reset Tabel</button>
             </div>
         </div>
 
         <div class="grid lg:grid-cols-3 gap-8">
             <div class="lg:col-span-2 bg-white p-10 rounded-[3rem] border border-slate-100 shadow-sm">
-                <h3 class="text-xs font-black text-slate-400 uppercase tracking-[0.2em] mb-8">Hasil Capaian Nutrisi Detil</h3>
+                <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-8">Hasil Capaian Nutrisi Detil</h3>
                 <div class="grid grid-cols-2 md:grid-cols-5 gap-6 text-center">
                     <div class="space-y-1">
                         <p class="text-[9px] font-black text-slate-400 uppercase">Energi</p>
@@ -159,15 +159,17 @@
 
             <div id="recom-box" class="bg-white border border-emerald-100 p-10 rounded-[3rem] shadow-xl shadow-emerald-50 hidden">
                 <h4 class="text-emerald-700 font-black text-xs uppercase tracking-widest mb-6 flex items-center gap-2"><i class="fas fa-lightbulb"></i> Rekomendasi</h4>
-                <ul id="recom-list" class="text-xs text-slate-600 space-y-4 font-medium"></ul>
+                <ul id="recom-list" class="text-xs text-slate-600 space-y-4 font-medium leading-relaxed"></ul>
             </div>
         </div>
     </main>
 
+    <datalist id="daftarBahan"></datalist>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, collection, query, where, getDocs, limit } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCaaCF_CQMftYWePC51dUWMRzndkZ-CW6o",
@@ -182,7 +184,7 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // --- Auth Logic ---
+        // --- 1. AUTH & STATUS ---
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 const userDoc = await getDoc(doc(db, "users", user.uid));
@@ -197,7 +199,56 @@
 
         window.logout = () => signOut(auth).then(() => window.location.href="login.html");
 
-        // --- Calculator Data ---
+        // --- 2. SEARCH DATABASE LOGIC ---
+        window.cariDatabase = async (input) => {
+            const keyword = input.value.trim().toLowerCase();
+            if (keyword.length < 3) return;
+
+            try {
+                const foodRef = collection(db, "food_database");
+                const q = query(foodRef, 
+                    where("nama_search", ">=", keyword), 
+                    where("nama_search", "<=", keyword + "\uf8ff"), 
+                    limit(6)
+                );
+                
+                const querySnapshot = await getDocs(q);
+                const datalist = document.getElementById('daftarBahan');
+                datalist.innerHTML = "";
+
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    let opt = document.createElement('option');
+                    opt.value = data.nama;
+                    opt.dataset.gizi = JSON.stringify(data);
+                    datalist.appendChild(opt);
+                });
+            } catch (e) { console.error(e); }
+        };
+
+        window.autoFillGizi = (input) => {
+            const row = input.closest('tr');
+            const datalist = document.getElementById('daftarBahan');
+            const selectedOpt = Array.from(datalist.options).find(opt => opt.value === input.value);
+
+            if (selectedOpt && selectedOpt.dataset.gizi) {
+                const data = JSON.parse(selectedOpt.dataset.gizi);
+                const gram = parseFloat(row.querySelector('.in-gram').value) || 100;
+                
+                const mapping = {
+                    'v-energi': 'energi', 'v-protein': 'protein', 'v-lemak': 'lemak',
+                    'v-karbo': 'karbo', 'v-serat': 'serat', 'v-natrium': 'natrium',
+                    'v-vitA': 'vitA', 'v-vitC': 'vitC', 'v-besi': 'besi'
+                };
+
+                for (let [cls, key] of Object.entries(mapping)) {
+                    row.querySelector('.' + cls).value = (data[key] * gram).toFixed(1);
+                }
+                window.hitungSemua();
+            }
+        };
+
+        // --- 3. CALCULATOR LOGIC ---
         const targetAKG = {
             "BALITA": { kal: 337.5, prot: 5, lemak: 11.25, karbo: 50, serat: 3.7, h_kal: 1350, h_prot: 20, h_lemak: 45, h_karbo: 200, h_serat: 15 },
             "PAUD":  { kal: 350,   prot: 6.25, lemak: 12.5, karbo: 55,    serat: 3.7, h_kal: 1400, h_prot: 25,  h_lemak: 50,  h_karbo: 220, h_serat: 15 },
@@ -212,24 +263,23 @@
         window.tambahBaris = () => {
             const tr = document.createElement('tr');
             tr.innerHTML = `
-                <td><input type="text" placeholder="Nama bahan..." class="in-nama font-bold text-slate-700"></td>
-                <td><input type="number" class="in-gram font-bold" value="0" oninput="window.hitungSemua()"></td>
-                <td><input type="number" class="v-energi" value="0" oninput="window.hitungSemua()"></td>
-                <td><input type="number" class="v-protein" value="0" oninput="window.hitungSemua()"></td>
-                <td><input type="number" class="v-lemak" value="0" oninput="window.hitungSemua()"></td>
-                <td><input type="number" class="v-karbo" value="0" oninput="window.hitungSemua()"></td>
-                <td><input type="number" class="v-serat" value="0" oninput="window.hitungSemua()"></td>
-                <td><input type="number" class="v-natrium" value="0" oninput="window.hitungSemua()"></td>
-                <td><input type="number" class="v-vitA" value="0" oninput="window.hitungSemua()"></td>
-                <td><input type="number" class="v-vitC" value="0" oninput="window.hitungSemua()"></td>
-                <td><input type="number" class="v-besi" value="0" oninput="window.hitungSemua()"></td>
+                <td><input type="text" list="daftarBahan" placeholder="Cari bahan..." oninput="window.cariDatabase(this); window.autoFillGizi(this)" class="in-nama font-bold text-slate-700"></td>
+                <td><input type="number" class="in-gram font-bold" value="100" oninput="window.autoFillGizi(this.closest('tr').querySelector('.in-nama'))"></td>
+                <td><input type="number" step="0.1" class="v-energi" value="0" oninput="window.hitungSemua()"></td>
+                <td><input type="number" step="0.1" class="v-protein" value="0" oninput="window.hitungSemua()"></td>
+                <td><input type="number" step="0.1" class="v-lemak" value="0" oninput="window.hitungSemua()"></td>
+                <td><input type="number" step="0.1" class="v-karbo" value="0" oninput="window.hitungSemua()"></td>
+                <td><input type="number" step="0.1" class="v-serat" value="0" oninput="window.hitungSemua()"></td>
+                <td><input type="number" step="0.1" class="v-natrium" value="0" oninput="window.hitungSemua()"></td>
+                <td><input type="number" step="0.1" class="v-vitA" value="0" oninput="window.hitungSemua()"></td>
+                <td><input type="number" step="0.1" class="v-vitC" value="0" oninput="window.hitungSemua()"></td>
+                <td><input type="number" step="0.1" class="v-besi" value="0" oninput="window.hitungSemua()"></td>
                 <td class="no-print text-center"><button onclick="this.parentElement.parentElement.remove();window.hitungSemua()" class="text-slate-300 hover:text-red-500 transition-colors"><i class="fas fa-times-circle"></i></button></td>
             `;
             document.getElementById('badanTabel').appendChild(tr);
         };
 
         window.hitungSemua = () => {
-            const fields = ['energi', 'protein', 'lemak', 'karbo', 'serat'];
             const allFields = ['energi', 'protein', 'lemak', 'karbo', 'serat', 'natrium', 'vitA', 'vitC', 'besi'];
             let total = {};
             allFields.forEach(f => total[f] = 0);
@@ -239,24 +289,28 @@
             });
 
             const target = targetAKG[document.getElementById('targetStatus').value];
-            
-            // Visual Update
             document.getElementById('percent-energi').innerText = Math.round(total.energi / target.h_kal * 100) + "%";
             document.getElementById('percent-protein').innerText = Math.round(total.protein / target.h_prot * 100) + "%";
             
             allFields.forEach(f => { if(document.getElementById(`rep-${f}`)) document.getElementById(`rep-${f}`).innerText = total[f].toFixed(1); });
 
-            // Rekomendasi
+            // Rekomendasi Gizi
             const list = document.getElementById('recom-list');
             list.innerHTML = "";
             if(total.energi < target.kal) {
-                list.innerHTML += `<li class="flex gap-2"><i class="fas fa-arrow-up text-emerald-500"></i> Tambah ±${Math.ceil((target.kal-total.energi)/1.8)}g Nasi untuk energi.</li>`;
+                const nasi = Math.ceil((target.kal-total.energi)/1.8);
+                list.innerHTML += `<li class="flex gap-2"><i class="fas fa-arrow-up text-emerald-500 mt-1"></i> <span>Tambah <b>±${nasi}g Nasi</b> untuk mencukupi kebutuhan energi.</span></li>`;
+            }
+            if(total.protein < target.prot) {
+                const ayam = Math.ceil((target.prot-total.protein)/0.27);
+                list.innerHTML += `<li class="flex gap-2"><i class="fas fa-plus-circle text-blue-500 mt-1"></i> <span>Tambah <b>±${ayam}g Lauk</b> untuk protein.</span></li>`;
             }
             document.getElementById('recom-box').classList.toggle('hidden', list.innerHTML === "");
         };
 
         window.resetForm = () => { if(confirm("Hapus semua?")) { document.getElementById('badanTabel').innerHTML=""; window.tambahBaris(); window.hitungSemua(); } };
 
+        // Start
         window.tambahBaris();
     </script>
 </body>
