@@ -13,7 +13,7 @@
         .in-nama { text-align: left !important; min-width: 200px; }
         input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
         
-        /* Table Styling */
+        /* Table Styling Modern */
         .gizi-table th { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; padding: 15px 8px; background: #fdfdfd; color: #94a3b8; border-bottom: 2px solid #f1f5f9; }
         .gizi-table td { padding: 10px 8px; border-bottom: 1px solid #f1f5f9; position: relative; }
         .gizi-table input { width: 100%; border: 1px solid transparent; background: transparent; text-align: center; font-size: 13px; padding: 8px; border-radius: 8px; transition: all 0.2s; }
@@ -50,10 +50,10 @@
         
         <div class="flex flex-col md:flex-row justify-between items-start mb-10 gap-6">
             <div>
-                <h1 class="text-3xl font-black text-slate-900 tracking-tight">Halo, <span id="user-display-name" class="text-emerald-600">...</span>!</h1>
+                <h1 class="text-3xl font-black text-slate-900 tracking-tight">Halo, <span id="user-display-name" class="text-emerald-600">Dokter</span>!</h1>
                 <div class="mt-2 flex items-center gap-3 no-print">
                     <div id="status-badge" class="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest bg-emerald-500 text-white shadow-lg shadow-emerald-100 italic">Trial Mode</div>
-                    <p id="trial-info" class="text-[10px] font-bold text-slate-400 uppercase tracking-tighter tracking-widest">Memuat status...</p>
+                    <p id="trial-info" class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Memuat status...</p>
                 </div>
             </div>
             <div class="no-print">
@@ -67,7 +67,7 @@
             <div class="lg:col-span-2 bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm flex flex-col md:flex-row items-center justify-between gap-8">
                 <div class="w-full">
                     <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Target Rekomendasi Gizi</label>
-                    <select id="targetStatus" onchange="window.hitungSemua()" class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:border-emerald-500 font-bold text-slate-700 appearance-none cursor-pointer">
+                    <select id="targetStatus" onchange="window.hitungSemua()" class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:border-emerald-500 font-bold text-slate-700 appearance-none cursor-pointer transition-all">
                         <option value="BALITA">BALITA (Target: 337.5 kkal)</option>
                         <option value="PAUD">PAUD/TK (Target: 350 kkal)</option>
                         <option value="SD123">SD123 (Target: 495 kkal)</option>
@@ -184,7 +184,7 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // --- 1. AUTH & STATUS ---
+        // --- 1. LOGIKA AUTH ---
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 const userDoc = await getDoc(doc(db, "users", user.uid));
@@ -192,20 +192,21 @@
                     const data = userDoc.data();
                     document.getElementById('user-display-name').innerText = data.nama.split(' ')[0];
                     const diff = data.trialExpired - Date.now();
-                    document.getElementById('trial-info').innerText = diff > 0 ? `Trial: ${Math.ceil(diff/(1000*60*60*24))} Hari Lagi` : "Trial Habis";
+                    document.getElementById('trial-info').innerText = diff > 0 ? `Trial: ${Math.ceil(diff/(1000*60*60*24))} Hari Lagi` : "Masa Trial Habis";
                 }
             } else { window.location.href = "login.html"; }
         });
 
         window.logout = () => signOut(auth).then(() => window.location.href="login.html");
 
-        // --- 2. SEARCH DATABASE LOGIC ---
+        // --- 2. LOGIKA DATABASE SEARCH (AUTOCOMPLETE) ---
         window.cariDatabase = async (input) => {
             const keyword = input.value.trim().toLowerCase();
-            if (keyword.length < 3) return;
+            if (keyword.length < 3) return; // Cari minimal 3 huruf
 
             try {
                 const foodRef = collection(db, "food_database");
+                // Mencari nama_search yang diawali dengan keyword
                 const q = query(foodRef, 
                     where("nama_search", ">=", keyword), 
                     where("nama_search", "<=", keyword + "\uf8ff"), 
@@ -223,7 +224,7 @@
                     opt.dataset.gizi = JSON.stringify(data);
                     datalist.appendChild(opt);
                 });
-            } catch (e) { console.error(e); }
+            } catch (e) { console.error("Search Error: ", e); }
         };
 
         window.autoFillGizi = (input) => {
@@ -242,13 +243,14 @@
                 };
 
                 for (let [cls, key] of Object.entries(mapping)) {
-                    row.querySelector('.' + cls).value = (data[key] * gram).toFixed(1);
+                    // Kalibrasi nilai berdasarkan gram (data dasar adalah per 1g)
+                    row.querySelector('.' + cls).value = (data[key] * gram).toFixed(2);
                 }
                 window.hitungSemua();
             }
         };
 
-        // --- 3. CALCULATOR LOGIC ---
+        // --- 3. LOGIKA KALKULATOR GIZI ---
         const targetAKG = {
             "BALITA": { kal: 337.5, prot: 5, lemak: 11.25, karbo: 50, serat: 3.7, h_kal: 1350, h_prot: 20, h_lemak: 45, h_karbo: 200, h_serat: 15 },
             "PAUD":  { kal: 350,   prot: 6.25, lemak: 12.5, karbo: 55,    serat: 3.7, h_kal: 1400, h_prot: 25,  h_lemak: 50,  h_karbo: 220, h_serat: 15 },
@@ -265,15 +267,15 @@
             tr.innerHTML = `
                 <td><input type="text" list="daftarBahan" placeholder="Cari bahan..." oninput="window.cariDatabase(this); window.autoFillGizi(this)" class="in-nama font-bold text-slate-700"></td>
                 <td><input type="number" class="in-gram font-bold" value="100" oninput="window.autoFillGizi(this.closest('tr').querySelector('.in-nama'))"></td>
-                <td><input type="number" step="0.1" class="v-energi" value="0" oninput="window.hitungSemua()"></td>
-                <td><input type="number" step="0.1" class="v-protein" value="0" oninput="window.hitungSemua()"></td>
-                <td><input type="number" step="0.1" class="v-lemak" value="0" oninput="window.hitungSemua()"></td>
-                <td><input type="number" step="0.1" class="v-karbo" value="0" oninput="window.hitungSemua()"></td>
-                <td><input type="number" step="0.1" class="v-serat" value="0" oninput="window.hitungSemua()"></td>
-                <td><input type="number" step="0.1" class="v-natrium" value="0" oninput="window.hitungSemua()"></td>
-                <td><input type="number" step="0.1" class="v-vitA" value="0" oninput="window.hitungSemua()"></td>
-                <td><input type="number" step="0.1" class="v-vitC" value="0" oninput="window.hitungSemua()"></td>
-                <td><input type="number" step="0.1" class="v-besi" value="0" oninput="window.hitungSemua()"></td>
+                <td><input type="number" step="0.01" class="v-energi" value="0" oninput="window.hitungSemua()"></td>
+                <td><input type="number" step="0.01" class="v-protein" value="0" oninput="window.hitungSemua()"></td>
+                <td><input type="number" step="0.01" class="v-lemak" value="0" oninput="window.hitungSemua()"></td>
+                <td><input type="number" step="0.01" class="v-karbo" value="0" oninput="window.hitungSemua()"></td>
+                <td><input type="number" step="0.01" class="v-serat" value="0" oninput="window.hitungSemua()"></td>
+                <td><input type="number" step="0.01" class="v-natrium" value="0" oninput="window.hitungSemua()"></td>
+                <td><input type="number" step="0.01" class="v-vitA" value="0" oninput="window.hitungSemua()"></td>
+                <td><input type="number" step="0.01" class="v-vitC" value="0" oninput="window.hitungSemua()"></td>
+                <td><input type="number" step="0.01" class="v-besi" value="0" oninput="window.hitungSemua()"></td>
                 <td class="no-print text-center"><button onclick="this.parentElement.parentElement.remove();window.hitungSemua()" class="text-slate-300 hover:text-red-500 transition-colors"><i class="fas fa-times-circle"></i></button></td>
             `;
             document.getElementById('badanTabel').appendChild(tr);
@@ -289,26 +291,29 @@
             });
 
             const target = targetAKG[document.getElementById('targetStatus').value];
+            
+            // Visual Persentase
             document.getElementById('percent-energi').innerText = Math.round(total.energi / target.h_kal * 100) + "%";
             document.getElementById('percent-protein').innerText = Math.round(total.protein / target.h_prot * 100) + "%";
             
+            // Detail Angka
             allFields.forEach(f => { if(document.getElementById(`rep-${f}`)) document.getElementById(`rep-${f}`).innerText = total[f].toFixed(1); });
 
-            // Rekomendasi Gizi
+            // Rekomendasi Pintar
             const list = document.getElementById('recom-list');
             list.innerHTML = "";
             if(total.energi < target.kal) {
                 const nasi = Math.ceil((target.kal-total.energi)/1.8);
-                list.innerHTML += `<li class="flex gap-2"><i class="fas fa-arrow-up text-emerald-500 mt-1"></i> <span>Tambah <b>±${nasi}g Nasi</b> untuk mencukupi kebutuhan energi.</span></li>`;
+                list.innerHTML += `<li class="flex gap-2"><i class="fas fa-check-circle text-emerald-500 mt-1"></i> <span>Tambah <b>±${nasi}g Nasi</b> untuk mencapai target energi.</span></li>`;
             }
             if(total.protein < target.prot) {
-                const ayam = Math.ceil((target.prot-total.protein)/0.27);
-                list.innerHTML += `<li class="flex gap-2"><i class="fas fa-plus-circle text-blue-500 mt-1"></i> <span>Tambah <b>±${ayam}g Lauk</b> untuk protein.</span></li>`;
+                const lauk = Math.ceil((target.prot-total.protein)/0.27);
+                list.innerHTML += `<li class="flex gap-2"><i class="fas fa-check-circle text-blue-500 mt-1"></i> <span>Tambah <b>±${lauk}g Lauk Pauk</b> untuk target protein.</span></li>`;
             }
             document.getElementById('recom-box').classList.toggle('hidden', list.innerHTML === "");
         };
 
-        window.resetForm = () => { if(confirm("Hapus semua?")) { document.getElementById('badanTabel').innerHTML=""; window.tambahBaris(); window.hitungSemua(); } };
+        window.resetForm = () => { if(confirm("Hapus semua data tabel?")) { document.getElementById('badanTabel').innerHTML=""; window.tambahBaris(); window.hitungSemua(); } };
 
         // Start
         window.tambahBaris();
