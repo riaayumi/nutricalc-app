@@ -13,12 +13,12 @@
         .in-nama { text-align: left !important; min-width: 200px; }
         input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
         
-        /* Table Styling - Tegas & Kontras */
-        .gizi-table { border-collapse: separate; border-spacing: 0; }
-        .gizi-table th { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; padding: 15px 8px; background: #f8fafc; color: #475569; border-bottom: 2px solid #cbd5e1; border-right: 1px solid #e2e8f0; }
-        .gizi-table td { padding: 8px; border-bottom: 1px solid #cbd5e1; border-right: 1px solid #e2e8f0; background: white; }
+        /* Table Styling - Garis Tegas & Kontras */
+        .gizi-table { border-collapse: separate; border-spacing: 0; width: 100%; border: 1px solid #cbd5e1; }
+        .gizi-table th { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; padding: 15px 8px; background: #f8fafc; color: #475569; border-bottom: 2px solid #cbd5e1; border-right: 1px solid #cbd5e1; }
+        .gizi-table td { padding: 8px; border-bottom: 1px solid #cbd5e1; border-right: 1px solid #cbd5e1; background: white; }
         .gizi-table tr:nth-child(even) td { background-color: #f9fafb; }
-        .gizi-table input { width: 100%; border: 1px solid #e2e8f0; background: white; text-align: center; font-size: 13px; padding: 6px; border-radius: 6px; transition: all 0.2s; }
+        .gizi-table input { width: 100%; border: 1px solid #cbd5e1; background: white; text-align: center; font-size: 13px; padding: 6px; border-radius: 6px; transition: all 0.2s; }
         .gizi-table input:focus { border-color: #10b981; box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1); outline: none; }
         
         .hidden { display: none; }
@@ -49,25 +49,25 @@
         
         <div id="section-profil" class="hidden">
             <h1 class="text-3xl font-black text-slate-900 tracking-tight mb-8">Pengaturan Profil</h1>
-            <div class="max-w-xl bg-white rounded-[2.5rem] shadow-xl p-10 border border-slate-200">
+            <div class="max-w-xl bg-white rounded-[2.5rem] shadow-xl p-10 border border-slate-300">
                 <div class="space-y-6">
                     <div>
                         <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block">Nama Lengkap</label>
-                        <input type="text" id="prof-nama" class="w-full p-4 bg-slate-50 border border-slate-300 rounded-2xl font-bold text-slate-700 focus:border-emerald-500 outline-none">
-                        <button onclick="window.updateNama()" class="mt-3 w-full py-3 bg-emerald-600 text-white rounded-xl font-bold text-xs shadow-lg shadow-emerald-100 hover:bg-emerald-700 transition-all">UPDATE NAMA</button>
+                        <input type="text" id="prof-nama" class="w-full p-4 bg-slate-50 border border-slate-300 rounded-2xl font-bold text-slate-700 outline-none focus:border-emerald-500">
+                        <button onclick="window.updateNama()" class="mt-3 w-full py-3 bg-emerald-600 text-white rounded-xl font-bold text-xs">UPDATE NAMA</button>
                     </div>
                     <hr class="border-slate-200">
                     <div>
                         <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block">Ganti Password</label>
                         <div class="pass-container mb-3">
-                            <input type="password" id="prof-pass1" placeholder="Password Baru" class="w-full p-4 bg-slate-50 border border-slate-300 rounded-2xl font-bold text-slate-700 focus:border-emerald-500 outline-none">
+                            <input type="password" id="prof-pass1" placeholder="Password Baru" class="w-full p-4 bg-slate-50 border border-slate-300 rounded-2xl font-bold text-slate-700 outline-none focus:border-emerald-500">
                             <i class="fas fa-eye pass-icon" onclick="window.togglePass('prof-pass1', this)"></i>
                         </div>
                         <div class="pass-container">
-                            <input type="password" id="prof-pass2" placeholder="Konfirmasi Password Baru" class="w-full p-4 bg-slate-50 border border-slate-300 rounded-2xl font-bold text-slate-700 focus:border-emerald-500 outline-none">
+                            <input type="password" id="prof-pass2" placeholder="Konfirmasi Password Baru" class="w-full p-4 bg-slate-50 border border-slate-300 rounded-2xl font-bold text-slate-700 outline-none focus:border-emerald-500">
                             <i class="fas fa-eye pass-icon" onclick="window.togglePass('prof-pass2', this)"></i>
                         </div>
-                        <button onclick="window.updatePassword()" class="mt-4 w-full py-3 bg-slate-900 text-white rounded-xl font-bold text-xs shadow-xl hover:bg-black transition-all">GANTI PASSWORD</button>
+                        <button onclick="window.updatePassword()" class="mt-4 w-full py-3 bg-slate-900 text-white rounded-xl font-bold text-xs">GANTI PASSWORD</button>
                     </div>
                 </div>
             </div>
@@ -78,23 +78,35 @@
                 <div>
                     <h1 class="text-3xl font-black text-slate-900 tracking-tight">Halo, <span id="user-display-name" class="text-emerald-600">Dokter</span>!</h1>
                     <div class="mt-2 flex items-center gap-3 no-print">
-                        <div id="status-badge" class="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest bg-emerald-500 text-white shadow-lg shadow-emerald-100 italic">Trial Mode</div>
+                        <div id="status-badge" class="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest bg-emerald-500 text-white shadow-lg italic">Trial Mode</div>
                         <p id="trial-info" class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Memuat status...</p>
                     </div>
                 </div>
                 <div class="no-print flex gap-3">
-                    <button onclick="window.saveHistory()" id="btn-save" class="px-6 py-3 bg-emerald-600 text-white rounded-2xl font-bold text-sm shadow-xl shadow-emerald-100 hover:bg-emerald-700 transition-all flex items-center gap-2"><i class="fas fa-save"></i> Simpan Riwayat</button>
-                    <button onclick="window.print()" class="px-6 py-3 bg-slate-900 text-white rounded-2xl font-bold text-sm shadow-xl hover:bg-black transition-all flex items-center gap-2"><i class="fas fa-print"></i> Cetak Laporan</button>
+                    <button onclick="window.saveHistory()" id="btn-save" class="px-6 py-3 bg-emerald-600 text-white rounded-2xl font-bold text-sm shadow-xl hover:bg-emerald-700 flex items-center gap-2"><i class="fas fa-save"></i> Simpan Riwayat</button>
+                    <button onclick="window.print()" class="px-6 py-3 bg-slate-900 text-white rounded-2xl font-bold text-sm shadow-xl hover:bg-black flex items-center gap-2"><i class="fas fa-print"></i> Cetak Laporan</button>
                 </div>
             </div>
 
             <div class="bg-white rounded-[2rem] shadow-xl border border-slate-300 overflow-hidden mb-10">
-                <div class="p-6 border-b border-slate-200 flex justify-between items-center bg-slate-50/50">
-                    <h3 class="font-bold text-slate-800 text-sm uppercase tracking-widest">Input Data Gizi</h3>
-                    <button onclick="window.tambahBaris()" class="text-xs font-black uppercase text-emerald-600 hover:text-emerald-700 transition-all"><i class="fas fa-plus-circle mr-1"></i> Tambah Bahan</button>
+                <div class="p-6 border-b border-slate-300 flex justify-between items-center bg-slate-50/50">
+                    <div class="w-1/2">
+                        <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Target Rekomendasi Gizi</label>
+                        <select id="targetStatus" onchange="window.hitungSemua()" class="w-full p-3 bg-white border border-slate-300 rounded-xl font-bold text-slate-700">
+                            <option value="BALITA">BALITA (Target: 337.5 kkal)</option>
+                            <option value="PAUD">PAUD/TK (Target: 350 kkal)</option>
+                            <option value="SD123">SD123 (Target: 495 kkal)</option>
+                            <option value="SD456">SD456 (Target: 585 kkal)</option>
+                            <option value="SMP">SMP/MTS (Target: 667.5 kkal)</option>
+                            <option value="SMA">SMA/SMK (Target: 712.5 kkal)</option>
+                            <option value="BUMIL">BUMIL (Target: 753.9 kkal)</option>
+                            <option value="BUSUI">BUSUI (Target: 753.9 kkal)</option>
+                        </select>
+                    </div>
+                    <button onclick="window.tambahBaris()" class="text-xs font-black uppercase text-emerald-600 hover:text-emerald-700"><i class="fas fa-plus-circle mr-1"></i> Tambah Bahan</button>
                 </div>
                 <div class="overflow-x-auto">
-                    <table class="w-full gizi-table">
+                    <table class="gizi-table">
                         <thead>
                             <tr>
                                 <th class="in-nama">Bahan Makanan</th>
@@ -113,17 +125,17 @@
 
             <div class="grid lg:grid-cols-3 gap-8">
                 <div class="lg:col-span-2 bg-white p-10 rounded-[2.5rem] border border-slate-300 shadow-sm">
-                    <h3 class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-8">Hasil Capaian Nutrisi Detil</h3>
+                    <h3 class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-8 text-center">Hasil Capaian Nutrisi Detil</h3>
                     <div class="grid grid-cols-2 md:grid-cols-5 gap-6 text-center">
-                        <div class="p-3 border border-slate-100 rounded-2xl bg-slate-50"><p class="text-[9px] font-black text-slate-400 uppercase">Energi</p><p class="text-base font-bold text-slate-700"><span id="rep-energi">0</span><small class="ml-1 text-[10px]">kcal</small></p></div>
-                        <div class="p-3 border border-slate-100 rounded-2xl bg-slate-50"><p class="text-[9px] font-black text-slate-400 uppercase">Protein</p><p class="text-base font-bold text-slate-700"><span id="rep-protein">0</span><small class="ml-1 text-[10px]">g</small></p></div>
-                        <div class="p-3 border border-slate-100 rounded-2xl bg-slate-50"><p class="text-[9px] font-black text-slate-400 uppercase">Lemak</p><p class="text-base font-bold text-slate-700"><span id="rep-lemak">0</span><small class="ml-1 text-[10px]">g</small></p></div>
-                        <div class="p-3 border border-slate-100 rounded-2xl bg-slate-50"><p class="text-[9px] font-black text-slate-400 uppercase">Karbo</p><p class="text-base font-bold text-slate-700"><span id="rep-karbo">0</span><small class="ml-1 text-[10px]">g</small></p></div>
-                        <div class="p-3 border border-slate-100 rounded-2xl bg-slate-50"><p class="text-[9px] font-black text-slate-400 uppercase">Serat</p><p class="text-base font-bold text-slate-700"><span id="rep-serat">0</span><small class="ml-1 text-[10px]">g</small></p></div>
+                        <div class="p-3 border border-slate-300 rounded-2xl bg-slate-50"><p class="text-[9px] font-black text-slate-400 uppercase">Energi</p><p class="text-base font-bold text-slate-700"><span id="rep-energi">0</span><small class="ml-1 text-[10px]">kcal</small></p></div>
+                        <div class="p-3 border border-slate-300 rounded-2xl bg-slate-50"><p class="text-[9px] font-black text-slate-400 uppercase">Protein</p><p class="text-base font-bold text-slate-700"><span id="rep-protein">0</span><small class="ml-1 text-[10px]">g</small></p></div>
+                        <div class="p-3 border border-slate-300 rounded-2xl bg-slate-50"><p class="text-[9px] font-black text-slate-400 uppercase">Lemak</p><p class="text-base font-bold text-slate-700"><span id="rep-lemak">0</span><small class="ml-1 text-[10px]">g</small></p></div>
+                        <div class="p-3 border border-slate-300 rounded-2xl bg-slate-50"><p class="text-[9px] font-black text-slate-400 uppercase">Karbo</p><p class="text-base font-bold text-slate-700"><span id="rep-karbo">0</span><small class="ml-1 text-[10px]">g</small></p></div>
+                        <div class="p-3 border border-slate-300 rounded-2xl bg-slate-50"><p class="text-[9px] font-black text-slate-400 uppercase">Serat</p><p class="text-base font-bold text-slate-700"><span id="rep-serat">0</span><small class="ml-1 text-[10px]">g</small></p></div>
                     </div>
                 </div>
-                <div id="recom-box" class="bg-white border-2 border-emerald-100 p-10 rounded-[3rem] shadow-xl shadow-emerald-50 hidden">
-                    <h4 class="text-emerald-700 font-black text-xs uppercase tracking-widest mb-6 flex items-center gap-2"><i class="fas fa-lightbulb"></i> Rekomendasi AI</h4>
+                <div id="recom-box" class="bg-white border-2 border-emerald-100 p-10 rounded-[3rem] shadow-xl hidden">
+                    <h4 class="text-emerald-700 font-black text-xs uppercase tracking-widest mb-6 flex items-center gap-2"><i class="fas fa-lightbulb"></i> Rekomendasi</h4>
                     <ul id="recom-list" class="text-xs text-slate-600 space-y-4 font-medium leading-relaxed"></ul>
                 </div>
             </div>
@@ -168,14 +180,24 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
+        // DATA TARGET AKG LENGKAP
+        const targetAKG = { 
+            "BALITA": { kal: 337.5, prot: 5, lemak: 11.25, karbo: 50, serat: 3.7, h_kal: 1350, h_prot: 20 }, 
+            "PAUD": { kal: 350, prot: 6.25, lemak: 12.5, karbo: 55, serat: 3.7, h_kal: 1400, h_prot: 25 }, 
+            "SD123": { kal: 495, prot: 12, lemak: 16.5, karbo: 75, serat: 5.0, h_kal: 1650, h_prot: 40 }, 
+            "SD456": { kal: 585, prot: 15.75, lemak: 19.5, karbo: 87, serat: 6.2, h_kal: 1950, h_prot: 52.5 }, 
+            "SMP": { kal: 667.5, prot: 20.25, lemak: 22.5, karbo: 97.5, serat: 7.5, h_kal: 2225, h_prot: 67.5 }, 
+            "SMA": { kal: 712.5, prot: 21, lemak: 23.25, karbo: 105, serat: 8.7, h_kal: 2375, h_prot: 70 }, 
+            "BUMIL": { kal: 753.9, prot: 23.4, lemak: 18.6, karbo: 117.9, serat: 9.0, h_kal: 2513, h_prot: 78 }, 
+            "BUSUI": { kal: 753.9, prot: 23.4, lemak: 18.6, karbo: 117.9, serat: 9.0, h_kal: 2513, h_prot: 78 } 
+        };
+
         window.togglePass = (id, el) => {
             const inp = document.getElementById(id);
             if (inp.type === 'password') {
-                inp.type = 'text';
-                el.classList.replace('fa-eye', 'fa-eye-slash');
+                inp.type = 'text'; el.classList.replace('fa-eye', 'fa-eye-slash');
             } else {
-                inp.type = 'password';
-                el.classList.replace('fa-eye-slash', 'fa-eye');
+                inp.type = 'password'; el.classList.replace('fa-eye-slash', 'fa-eye');
             }
         };
 
@@ -213,9 +235,7 @@
             try {
                 await updatePassword(auth.currentUser, p1);
                 alert("Password berhasil diganti!");
-                document.getElementById('prof-pass1').value = "";
-                document.getElementById('prof-pass2').value = "";
-            } catch (e) { alert("Sesi berakhir demi keamanan. Silakan Logout dan Login kembali."); }
+            } catch (e) { alert("Silakan Logout dan Login kembali untuk ganti password."); }
         };
 
         window.switchTab = async (tab) => {
@@ -265,7 +285,7 @@
 
         window.loadHistory = async () => {
             const body = document.getElementById('riwayat-body');
-            body.innerHTML = '<tr><td colspan="5" class="p-10 text-center">Memuat...</td></tr>';
+            body.innerHTML = '<tr><td colspan="5" class="p-10 text-center">Memuat riwayat...</td></tr>';
             const q = query(collection(db, "history"), where("userId", "==", auth.currentUser.uid));
             const snap = await getDocs(q);
             body.innerHTML = "";
@@ -277,9 +297,11 @@
                     <td class="p-6 text-[10px] font-black text-slate-400">${d.targetLabel}</td>
                     <td class="p-6 font-bold text-emerald-600">${d.summary.energi} kkal</td>
                     <td class="p-6 text-xs text-slate-400 italic">${d.catatan.substring(0,20)}...</td>
-                    <td class="p-6 text-center flex justify-center gap-2">
-                        <button onclick="window.viewHistoryDetail('${docSnap.id}')" class="px-4 py-2 bg-slate-900 text-white rounded-xl text-[10px] font-bold">DETAIL</button>
-                        <button onclick="window.deleteHistory('${docSnap.id}')" class="px-4 py-2 bg-red-50 text-red-500 rounded-xl text-[10px] font-bold border border-red-200"><i class="fas fa-trash-alt"></i></button>
+                    <td class="p-6 text-center">
+                        <div class="flex justify-center gap-2">
+                            <button onclick="window.viewHistoryDetail('${docSnap.id}')" class="px-4 py-2 bg-slate-900 text-white rounded-xl text-[10px] font-bold">DETAIL</button>
+                            <button onclick="window.deleteHistory('${docSnap.id}')" class="px-4 py-2 bg-red-50 text-red-500 rounded-xl text-[10px] font-bold border border-red-200"><i class="fas fa-trash-alt"></i></button>
+                        </div>
                     </td>
                 </tr>`;
             });
@@ -289,8 +311,7 @@
             if (confirm("Hapus riwayat ini?")) {
                 try {
                     await deleteDoc(doc(db, "history", id));
-                    alert("Terhapus.");
-                    window.loadHistory();
+                    alert("Terhapus."); window.loadHistory();
                 } catch (e) { alert("Gagal"); }
             }
         };
@@ -305,14 +326,12 @@
                 document.getElementById('targetStatus').value = d.targetLabel;
                 d.items.forEach(item => {
                     const tr = document.createElement('tr');
-                    tr.innerHTML = `<td><input type="text" value="${item.nama}" class="in-nama font-bold text-slate-700"></td><td><input type="number" value="${item.berat}" class="in-gram font-bold" oninput="window.hitungSemua()"></td><td><input type="number" value="${item.energi}" class="v-energi" readonly></td><td><input type="number" value="${item.protein}" class="v-protein" readonly></td><td><input type="number" value="${item.lemak}" class="v-lemak" readonly></td><td><input type="number" value="${item.karbo}" class="v-karbo" readonly></td><td><input type="number" value="${item.serat}" class="v-serat" readonly></td><td><input type="number" value="${item.natrium}" class="v-natrium" readonly></td><td class="no-print text-center"><button onclick="this.parentElement.parentElement.remove();window.hitungSemua()" class="text-slate-300 hover:text-red-500"><i class="fas fa-times-circle"></i></button></td>`;
+                    tr.innerHTML = `<td><input type="text" value="${item.nama}" class="in-nama font-bold text-slate-700"></td><td><input type="number" value="${item.berat}" class="in-gram font-bold" oninput="window.hitungSemua()"></td><td><input type="number" value="${item.energi}" class="v-energi" readonly></td><td><input type="number" value="${item.protein}" class="v-protein" readonly></td><td><input type="number" value="${item.lemak}" class="v-lemak" readonly></td><td><input type="number" value="${item.karbo}" class="v-karbo" readonly></td><td><input type="number" value="${item.serat}" class="v-serat" readonly></td><td><input type="number" value="${item.natrium}" class="v-natrium" readonly></td><td class="no-print text-center"><button onclick="this.parentElement.parentElement.remove();window.hitungSemua()" class="text-slate-300 hover:text-red-500 transition-colors"><i class="fas fa-times-circle"></i></button></td>`;
                     document.getElementById('badanTabel').appendChild(tr);
                 });
                 window.hitungSemua();
             }
         };
-
-        const targetAKG = { "BALITA": { kal: 337.5, prot: 5, h_kal: 1350, h_prot: 20 }, "PAUD": { kal: 350, prot: 6.25, h_kal: 1400, h_prot: 25 }, "SD123": { kal: 495, prot: 12, h_kal: 1650, h_prot: 40 }, "SD456": { kal: 585, prot: 15.75, h_kal: 1950, h_prot: 52.5 }, "SMP": { kal: 667.5, prot: 20.25, h_kal: 2225, h_prot: 67.5 }, "SMA": { kal: 712.5, prot: 21, h_kal: 2375, h_prot: 70 }, "BUMIL": { kal: 753.9, prot: 23.4, h_kal: 2513, h_prot: 78 }, "BUSUI": { kal: 753.9, prot: 23.4, h_kal: 2513, h_prot: 78 } };
 
         window.tambahBaris = () => {
             const tr = document.createElement('tr');
