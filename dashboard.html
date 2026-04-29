@@ -38,6 +38,7 @@
             <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest px-4 mb-4">Menu Utama</p>
             <a href="#" id="menu-kalkulator" onclick="window.switchTab('kalkulator')" class="nav-active flex items-center gap-3 px-4 py-3.5 rounded-2xl font-bold transition-all"><i class="fas fa-calculator w-5"></i> Kalkulator Gizi</a>
             <a href="#" id="menu-riwayat" onclick="window.switchTab('riwayat')" class="flex items-center gap-3 px-4 py-3.5 rounded-2xl text-slate-500 font-semibold hover:bg-slate-50 transition-all"><i class="fas fa-folder-open w-5"></i> Riwayat Pasien</a>
+            <a href="#" id="menu-profil" onclick="window.switchTab('profil')" class="flex items-center gap-3 px-4 py-3.5 rounded-2xl text-slate-500 font-semibold hover:bg-slate-50 transition-all"><i class="fas fa-user-circle w-5"></i> Profil Akun</a>
             <a href="#" class="flex items-center gap-3 px-4 py-3.5 rounded-2xl text-slate-500 font-semibold hover:bg-slate-50 transition-all"><i class="fas fa-book-medical w-5"></i> Database Gizi</a>
         </nav>
         <div class="p-6 border-t border-slate-100">
@@ -112,15 +113,7 @@
                             <tr>
                                 <th class="in-nama">Bahan Makanan</th>
                                 <th style="width:80px">Berat<span>(g)</span></th>
-                                <th>Energi</th>
-                                <th>Prot</th>
-                                <th>Lmk</th>
-                                <th>Krb</th>
-                                <th>Srt</th>
-                                <th>Na</th>
-                                <th>Vit A</th>
-                                <th>Vit C</th>
-                                <th>Besi</th>
+                                <th>Energi</th><th>Prot</th><th>Lmk</th><th>Krb</th><th>Srt</th><th>Na</th><th>Vit A</th><th>Vit C</th><th>Besi</th>
                                 <th class="no-print"></th>
                             </tr>
                         </thead>
@@ -168,14 +161,34 @@
             </div>
         </div>
 
+        <div id="section-profil" class="hidden">
+            <h1 class="text-3xl font-black text-slate-900 tracking-tight mb-8">Pengaturan Profil</h1>
+            <div class="max-w-xl bg-white rounded-[2.5rem] shadow-xl p-10 border border-white">
+                <div class="space-y-6">
+                    <div>
+                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block">Nama Lengkap</label>
+                        <input type="text" id="prof-nama" class="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl font-bold text-slate-700">
+                        <button onclick="window.updateNama()" class="mt-3 w-full py-3 bg-emerald-600 text-white rounded-xl font-bold text-xs">UPDATE NAMA</button>
+                    </div>
+                    <hr class="border-slate-100">
+                    <div>
+                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block">Ganti Password</label>
+                        <input type="password" id="prof-pass1" placeholder="Password Baru" class="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl font-bold text-slate-700 mb-3">
+                        <input type="password" id="prof-pass2" placeholder="Konfirmasi Password Baru" class="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl font-bold text-slate-700">
+                        <button onclick="window.updatePassword()" class="mt-3 w-full py-3 bg-slate-900 text-white rounded-xl font-bold text-xs">GANTI PASSWORD</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </main>
 
     <datalist id="daftarBahan"></datalist>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, collection, query, where, getDocs, limit, addDoc, serverTimestamp, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged, signOut, updatePassword, updateProfile } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, collection, query, where, getDocs, limit, addDoc, serverTimestamp, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCaaCF_CQMftYWePC51dUWMRzndkZ-CW6o",
@@ -185,25 +198,52 @@
             messagingSenderId: "361370382525",
             appId: "1:361370382525:web:c11112ece7454b81a487d4"
         };
-
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
 
+        // --- AUTH & INITIAL DATA ---
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 const userDoc = await getDoc(doc(db, "users", user.uid));
                 if (userDoc.exists()) {
                     const data = userDoc.data();
                     document.getElementById('user-display-name').innerText = data.nama.split(' ')[0];
+                    document.getElementById('prof-nama').value = data.nama;
                     const diff = data.trialExpired - Date.now();
-                    document.getElementById('trial-info').innerText = diff > 0 ? `Trial: ${Math.ceil(diff/(1000*60*60*24))} Hari Lagi` : "Masa Trial Habis";
+                    document.getElementById('trial-info').innerText = diff > 0 ? `Trial: ${Math.ceil(diff/(1000*60*60*24))} Hari Lagi` : "Habis";
                 }
             } else { window.location.href = "login.html"; }
         });
 
         window.logout = () => signOut(auth).then(() => window.location.href="login.html");
 
+        // --- MANAJEMEN PROFIL (BARU) ---
+        window.updateNama = async () => {
+            const newName = document.getElementById('prof-nama').value;
+            if(!newName) return alert("Nama tidak boleh kosong");
+            try {
+                await updateDoc(doc(db, "users", auth.currentUser.uid), { nama: newName });
+                await updateProfile(auth.currentUser, { displayName: newName });
+                alert("Nama berhasil diubah!");
+                document.getElementById('user-display-name').innerText = newName.split(' ')[0];
+            } catch (e) { alert("Gagal update nama"); }
+        };
+
+        window.updatePassword = async () => {
+            const p1 = document.getElementById('prof-pass1').value;
+            const p2 = document.getElementById('prof-pass2').value;
+            if(p1 !== p2) return alert("Password tidak cocok");
+            if(p1.length < 6) return alert("Minimal 6 karakter");
+            try {
+                await updatePassword(auth.currentUser, p1);
+                alert("Password berhasil diganti!");
+                document.getElementById('prof-pass1').value = "";
+                document.getElementById('prof-pass2').value = "";
+            } catch (e) { alert("Sesi berakhir. Silakan logout dan login kembali untuk ganti password."); }
+        };
+
+        // --- SEARCH DATABASE ---
         window.cariDatabase = async (input) => {
             const keyword = input.value.trim().toLowerCase();
             if (keyword.length < 3) return;
@@ -238,97 +278,66 @@
             }
         };
 
+        // --- TAB SWITCH ---
         window.switchTab = async (tab) => {
-            const calc = document.getElementById('section-kalkulator');
-            const riwayat = document.getElementById('section-riwayat');
-            const menuCalc = document.getElementById('menu-kalkulator');
-            const menuRiwayat = document.getElementById('menu-riwayat');
-            if(tab === 'riwayat') {
-                calc.classList.add('hidden');
-                riwayat.classList.remove('hidden');
-                menuCalc.classList.remove('nav-active', 'font-bold');
-                menuRiwayat.classList.add('nav-active', 'font-bold');
-                await window.loadHistory();
-            } else {
-                calc.classList.remove('hidden');
-                riwayat.classList.add('hidden');
-                menuRiwayat.classList.remove('nav-active', 'font-bold');
-                menuCalc.classList.add('nav-active', 'font-bold');
-            }
+            const sections = ['section-kalkulator', 'section-riwayat', 'section-profil'];
+            const menus = ['menu-kalkulator', 'menu-riwayat', 'menu-profil'];
+            sections.forEach(s => document.getElementById(s).classList.add('hidden'));
+            menus.forEach(m => document.getElementById(m).classList.remove('nav-active', 'font-bold'));
+            
+            document.getElementById(`section-${tab}`).classList.remove('hidden');
+            document.getElementById(`menu-${tab}`).classList.add('nav-active', 'font-bold');
+            
+            if(tab === 'riwayat') await window.loadHistory();
         };
 
+        // --- HISTORY LOGIC ---
         window.saveHistory = async () => {
             const user = auth.currentUser;
             const rows = document.querySelectorAll('#badanTabel tr');
             if (!user || rows.length === 0) return alert("Data kosong!");
             const btn = document.getElementById('btn-save');
             btn.disabled = true; btn.innerText = "Menyimpan...";
-            const items = [];
-            rows.forEach(r => {
-                items.push({
-                    nama: r.querySelector('.in-nama').value,
-                    berat: r.querySelector('.in-gram').value,
-                    energi: r.querySelector('.v-energi').value,
-                    protein: r.querySelector('.v-protein').value,
-                    lemak: r.querySelector('.v-lemak').value,
-                    karbo: r.querySelector('.v-karbo').value,
-                    serat: r.querySelector('.v-serat').value,
-                    natrium: r.querySelector('.v-natrium').value,
-                    vitA: r.querySelector('.v-vitA').value,
-                    vitC: r.querySelector('.v-vitC').value,
-                    besi: r.querySelector('.v-besi').value
-                });
-            });
-            const docData = {
-                userId: user.uid,
-                timestamp: serverTimestamp(),
-                targetLabel: document.getElementById('targetStatus').value,
-                catatan: document.getElementById('catatan-analis').innerText,
-                summary: { energi: document.getElementById('rep-energi').innerText },
-                items: items
-            };
+            const items = Array.from(rows).map(r => ({
+                nama: r.querySelector('.in-nama').value, berat: r.querySelector('.in-gram').value,
+                energi: r.querySelector('.v-energi').value, protein: r.querySelector('.v-protein').value,
+                lemak: r.querySelector('.v-lemak').value, karbo: r.querySelector('.v-karbo').value,
+                serat: r.querySelector('.v-serat').value, natrium: r.querySelector('.v-natrium').value,
+                vitA: r.querySelector('.v-vitA').value, vitC: r.querySelector('.v-vitC').value, besi: r.querySelector('.v-besi').value
+            }));
             try {
-                await addDoc(collection(db, "history"), docData);
+                await addDoc(collection(db, "history"), { userId: user.uid, timestamp: serverTimestamp(), targetLabel: document.getElementById('targetStatus').value, catatan: document.getElementById('catatan-analis').innerText, summary: { energi: document.getElementById('rep-energi').innerText }, items: items });
                 alert("Berhasil disimpan!");
             } catch (e) { alert("Gagal Simpan"); }
             finally { btn.disabled = false; btn.innerHTML = '<i class="fas fa-save"></i> Simpan Riwayat'; }
         };
 
         window.loadHistory = async () => {
-            const user = auth.currentUser;
             const body = document.getElementById('riwayat-body');
             body.innerHTML = '<tr><td colspan="5" class="p-10 text-center">Memuat...</td></tr>';
-            const q = query(collection(db, "history"), where("userId", "==", user.uid));
+            const q = query(collection(db, "history"), where("userId", "==", auth.currentUser.uid));
             const snap = await getDocs(q);
-            body.innerHTML = "";
-            if (snap.empty) {
-                body.innerHTML = '<tr><td colspan="5" class="p-10 text-center">Tidak ada riwayat.</td></tr>';
-                return;
-            }
+            body.innerHTML = snap.empty ? '<tr><td colspan="5" class="p-10 text-center">Kosong</td></tr>' : "";
             snap.forEach(docSnap => {
                 const d = docSnap.data();
                 const date = d.timestamp ? d.timestamp.toDate().toLocaleDateString('id-ID') : '-';
-                body.innerHTML += `
-                    <tr class="border-b border-slate-50 hover:bg-slate-50/50 transition-colors">
-                        <td class="p-6 font-bold text-slate-700">${date}</td>
-                        <td class="p-6"><span class="text-[10px] font-black bg-slate-100 px-2 py-1 rounded text-slate-500">${d.targetLabel}</span></td>
-                        <td class="p-6 font-bold text-emerald-600">${d.summary.energi} kkal</td>
-                        <td class="p-6 text-xs text-slate-400 italic">${d.catatan.substring(0,20)}...</td>
-                        <td class="p-6 text-center">
-                            <div class="flex justify-center gap-2">
-                                <button onclick="window.viewHistoryDetail('${docSnap.id}')" class="px-4 py-2 bg-slate-900 text-white rounded-xl text-[10px] font-bold hover:bg-black transition-all">DETAIL</button>
-                                <button onclick="window.deleteHistory('${docSnap.id}')" class="px-4 py-2 bg-red-50 text-red-500 rounded-xl text-[10px] font-bold hover:bg-red-500 hover:text-white transition-all">
-                                    <i class="fas fa-trash-alt"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                `;
+                body.innerHTML += `<tr class="border-b border-slate-50">
+                    <td class="p-6 font-bold text-slate-700">${date}</td>
+                    <td class="p-6"><span class="text-[10px] font-black bg-slate-100 px-2 py-1 rounded text-slate-500">${d.targetLabel}</span></td>
+                    <td class="p-6 font-bold text-emerald-600">${d.summary.energi} kkal</td>
+                    <td class="p-6 text-xs text-slate-400 italic">${d.catatan.substring(0,20)}...</td>
+                    <td class="p-6 text-center">
+                        <div class="flex justify-center gap-2">
+                            <button onclick="window.viewHistoryDetail('${docSnap.id}')" class="px-4 py-2 bg-slate-900 text-white rounded-xl text-[10px] font-bold">DETAIL</button>
+                            <button onclick="window.deleteHistory('${docSnap.id}')" class="px-4 py-2 bg-red-50 text-red-500 rounded-xl text-[10px] font-bold"><i class="fas fa-trash-alt"></i></button>
+                        </div>
+                    </td>
+                </tr>`;
             });
         };
 
         window.deleteHistory = async (id) => {
-            if (confirm("Hapus riwayat ini permanen?")) {
+            if (confirm("Hapus riwayat ini?")) {
                 try {
                     await deleteDoc(doc(db, "history", id));
                     alert("Berhasil dihapus.");
@@ -347,44 +356,19 @@
                 document.getElementById('targetStatus').value = d.targetLabel;
                 d.items.forEach(item => {
                     const tr = document.createElement('tr');
-                    tr.innerHTML = `
-                        <td><input type="text" value="${item.nama}" class="in-nama font-bold text-slate-700"></td>
-                        <td><input type="number" value="${item.berat}" class="in-gram font-bold" oninput="window.hitungSemua()"></td>
-                        <td><input type="number" value="${item.energi}" class="v-energi" oninput="window.hitungSemua()"></td>
-                        <td><input type="number" value="${item.protein}" class="v-protein" oninput="window.hitungSemua()"></td>
-                        <td><input type="number" value="${item.lemak}" class="v-lemak" oninput="window.hitungSemua()"></td>
-                        <td><input type="number" value="${item.karbo}" class="v-karbo" oninput="window.hitungSemua()"></td>
-                        <td><input type="number" value="${item.serat}" class="v-serat" oninput="window.hitungSemua()"></td>
-                        <td><input type="number" value="${item.natrium}" class="v-natrium" oninput="window.hitungSemua()"></td>
-                        <td><input type="number" value="${item.vitA}" class="v-vitA" oninput="window.hitungSemua()"></td>
-                        <td><input type="number" value="${item.vitC}" class="v-vitC" oninput="window.hitungSemua()"></td>
-                        <td><input type="number" value="${item.besi}" class="v-besi" oninput="window.hitungSemua()"></td>
-                        <td class="no-print text-center"><button onclick="this.parentElement.parentElement.remove();window.hitungSemua()" class="text-slate-300 hover:text-red-500 transition-colors"><i class="fas fa-times-circle"></i></button></td>
-                    `;
+                    tr.innerHTML = `<td><input type="text" value="${item.nama}" class="in-nama font-bold text-slate-700"></td><td><input type="number" value="${item.berat}" class="in-gram font-bold" oninput="window.hitungSemua()"></td><td><input type="number" value="${item.energi}" class="v-energi" oninput="window.hitungSemua()"></td><td><input type="number" value="${item.protein}" class="v-protein" oninput="window.hitungSemua()"></td><td><input type="number" value="${item.lemak}" class="v-lemak" oninput="window.hitungSemua()"></td><td><input type="number" value="${item.karbo}" class="v-karbo" oninput="window.hitungSemua()"></td><td><input type="number" value="${item.serat}" class="v-serat" oninput="window.hitungSemua()"></td><td><input type="number" value="${item.natrium}" class="v-natrium" oninput="window.hitungSemua()"></td><td><input type="number" value="${item.vitA}" class="v-vitA" oninput="window.hitungSemua()"></td><td><input type="number" value="${item.vitC}" class="v-vitC" oninput="window.hitungSemua()"></td><td><input type="number" value="${item.besi}" class="v-besi" oninput="window.hitungSemua()"></td><td class="no-print text-center"><button onclick="this.parentElement.parentElement.remove();window.hitungSemua()" class="text-slate-300 hover:text-red-500"><i class="fas fa-times-circle"></i></button></td>`;
                     document.getElementById('badanTabel').appendChild(tr);
                 });
                 window.hitungSemua();
             }
         };
 
+        // --- CALCULATOR LOGIC ---
         const targetAKG = { "BALITA": { kal: 337.5, prot: 5, h_kal: 1350, h_prot: 20 }, "PAUD": { kal: 350, prot: 6.25, h_kal: 1400, h_prot: 25 }, "SD123": { kal: 495, prot: 12, h_kal: 1650, h_prot: 40 }, "SD456": { kal: 585, prot: 15.75, h_kal: 1950, h_prot: 52.5 }, "SMP": { kal: 667.5, prot: 20.25, h_kal: 2225, h_prot: 67.5 }, "SMA": { kal: 712.5, prot: 21, h_kal: 2375, h_prot: 70 }, "BUMIL": { kal: 753.9, prot: 23.4, h_kal: 2513, h_prot: 78 }, "BUSUI": { kal: 753.9, prot: 23.4, h_kal: 2513, h_prot: 78 } };
 
         window.tambahBaris = () => {
             const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td><input type="text" list="daftarBahan" placeholder="Cari bahan..." oninput="window.cariDatabase(this); window.autoFillGizi(this)" class="in-nama font-bold text-slate-700"></td>
-                <td><input type="number" class="in-gram font-bold" value="0" oninput="window.autoFillGizi(this.closest('tr').querySelector('.in-nama'))"></td>
-                <td><input type="number" step="0.01" class="v-energi" value="0" oninput="window.hitungSemua()"></td>
-                <td><input type="number" step="0.01" class="v-protein" value="0" oninput="window.hitungSemua()"></td>
-                <td><input type="number" step="0.01" class="v-lemak" value="0" oninput="window.hitungSemua()"></td>
-                <td><input type="number" step="0.01" class="v-karbo" value="0" oninput="window.hitungSemua()"></td>
-                <td><input type="number" step="0.01" class="v-serat" value="0" oninput="window.hitungSemua()"></td>
-                <td><input type="number" step="0.01" class="v-natrium" value="0" oninput="window.hitungSemua()"></td>
-                <td><input type="number" step="0.01" class="v-vitA" value="0" oninput="window.hitungSemua()"></td>
-                <td><input type="number" step="0.01" class="v-vitC" value="0" oninput="window.hitungSemua()"></td>
-                <td><input type="number" step="0.01" class="v-besi" value="0" oninput="window.hitungSemua()"></td>
-                <td class="no-print text-center"><button onclick="this.parentElement.parentElement.remove();window.hitungSemua()" class="text-slate-300 hover:text-red-500 transition-colors"><i class="fas fa-times-circle"></i></button></td>
-            `;
+            tr.innerHTML = `<td><input type="text" list="daftarBahan" oninput="window.cariDatabase(this); window.autoFillGizi(this)" class="in-nama font-bold text-slate-700"></td><td><input type="number" class="in-gram font-bold" value="0" oninput="window.autoFillGizi(this.closest('tr').querySelector('.in-nama'))"></td><td><input type="number" step="0.01" class="v-energi" value="0" oninput="window.hitungSemua()"></td><td><input type="number" step="0.01" class="v-protein" value="0" oninput="window.hitungSemua()"></td><td><input type="number" step="0.01" class="v-lemak" value="0" oninput="window.hitungSemua()"></td><td><input type="number" step="0.01" class="v-karbo" value="0" oninput="window.hitungSemua()"></td><td><input type="number" step="0.01" class="v-serat" value="0" oninput="window.hitungSemua()"></td><td><input type="number" step="0.01" class="v-natrium" value="0" oninput="window.hitungSemua()"></td><td><input type="number" step="0.01" class="v-vitA" value="0" oninput="window.hitungSemua()"></td><td><input type="number" step="0.01" class="v-vitC" value="0" oninput="window.hitungSemua()"></td><td><input type="number" step="0.01" class="v-besi" value="0" oninput="window.hitungSemua()"></td><td class="no-print text-center"><button onclick="this.parentElement.parentElement.remove();window.hitungSemua()" class="text-slate-300 hover:text-red-500"><i class="fas fa-times-circle"></i></button></td>`;
             document.getElementById('badanTabel').appendChild(tr);
         };
 
@@ -403,7 +387,7 @@
             document.getElementById('recom-box').classList.toggle('hidden', list.innerHTML === "");
         };
 
-        window.resetForm = () => { if(confirm("Hapus?")) { document.getElementById('badanTabel').innerHTML=""; window.tambahBaris(); window.hitungSemua(); } };
+        window.resetForm = () => { if(confirm("Hapus semua data tabel?")) { document.getElementById('badanTabel').innerHTML=""; window.tambahBaris(); window.hitungSemua(); } };
         window.tambahBaris();
     </script>
 </body>
