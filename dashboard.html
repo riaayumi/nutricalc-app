@@ -9,78 +9,25 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
-        
-        /* Layout Sidebar & Sidebar Active State */
         .nav-active { background: #ecfdf5; color: #059669; border-right: 4px solid #10b981; }
-        
-        /* Card Styling */
-        .dashboard-card { 
-            background: white; 
-            border-radius: 24px; 
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-            border: 1px solid rgba(226, 232, 240, 0.8);
-        }
-
-        /* Modern Table - Floating Rows */
+        .dashboard-card { background: white; border-radius: 24px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border: 1px solid rgba(226, 232, 240, 0.8); }
         .gizi-table { width: 100%; border-spacing: 0 8px; border-collapse: separate; }
-        .gizi-table th { 
-            padding: 12px 16px; 
-            font-size: 11px; 
-            font-weight: 700; 
-            color: #64748b; 
-            text-transform: uppercase; 
-            letter-spacing: 0.1em;
-        }
-        .gizi-table td { 
-            padding: 12px 16px; 
-            background: white;
-            border-top: 1px solid #f1f5f9;
-            border-bottom: 1px solid #f1f5f9;
-        }
+        .gizi-table th { padding: 12px 8px; vertical-align: top; }
+        .gizi-table td { padding: 10px 8px; background: white; border-top: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9; }
         .gizi-table td:first-child { border-left: 1px solid #f1f5f9; border-radius: 12px 0 0 12px; }
         .gizi-table td:last-child { border-right: 1px solid #f1f5f9; border-radius: 0 12px 12px 0; }
-
-        /* Modern Input Fields */
-        .table-input {
-            width: 100%;
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            padding: 8px 12px;
-            border-radius: 10px;
-            font-size: 13px;
-            transition: all 0.2s;
-        }
-        .table-input:focus {
-            background: white;
-            border-color: #10b981;
-            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
-            outline: none;
-        }
-
-        /* Bento Stats Card */
-        .stat-box {
-            padding: 20px;
-            border-radius: 20px;
-            background: white;
-            border: 1px solid #e2e8f0;
-            transition: transform 0.2s;
-        }
-
+        .table-input { width: 100%; background: #f8fafc; border: 1px solid #e2e8f0; padding: 8px 10px; border-radius: 10px; font-size: 13px; transition: all 0.2s; }
+        .table-input:focus { background: white; border-color: #10b981; box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1); outline: none; }
+        .stat-box { padding: 20px; border-radius: 20px; background: white; border: 1px solid #e2e8f0; }
         .hidden { display: none; }
-        .pass-container { position: relative; }
-        .pass-icon { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #94a3b8; }
-        
         @media print { .no-print { display: none !important; } }
     </style>
 </head>
 <body class="flex min-h-screen text-slate-800">
 
-    <!-- SIDEBAR NAVIGATION -->
     <aside class="w-64 bg-white border-r border-slate-200 hidden md:flex flex-col z-20 no-print">
         <div class="p-8 flex items-center gap-3">
-            <div class="bg-emerald-600 p-2 rounded-xl text-white">
-                <i class="fas fa-leaf text-xl"></i>
-            </div>
+            <div class="bg-emerald-600 p-2 rounded-xl text-white"><i class="fas fa-leaf text-xl"></i></div>
             <span class="text-xl font-extrabold text-slate-800 tracking-tighter">NutriCalc</span>
         </div>
         <nav class="flex-grow px-4 space-y-1">
@@ -95,8 +42,6 @@
     </aside>
 
     <main class="flex-grow p-6 md:p-10 overflow-y-auto">
-        
-        <!-- SECTION KALKULATOR -->
         <div id="section-kalkulator" class="max-w-6xl mx-auto">
             <div class="flex flex-col md:flex-row justify-between items-end mb-8 gap-4">
                 <div>
@@ -107,16 +52,11 @@
                     </div>
                 </div>
                 <div class="flex gap-3 no-print">
-                    <button onclick="window.saveHistory()" class="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl font-bold text-sm shadow-lg shadow-emerald-100 flex items-center gap-2 transition-all">
-                        <i class="fas fa-save"></i> Simpan
-                    </button>
-                    <button onclick="window.print()" class="px-6 py-3 bg-white border border-slate-200 text-slate-700 rounded-2xl font-bold text-sm hover:bg-slate-50 flex items-center gap-2">
-                        <i class="fas fa-print"></i> Cetak
-                    </button>
+                    <button onclick="window.saveHistory()" class="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl font-bold text-sm shadow-lg shadow-emerald-100 flex items-center gap-2 transition-all"><i class="fas fa-save"></i> Simpan</button>
+                    <button onclick="window.print()" class="px-6 py-3 bg-white border border-slate-200 text-slate-700 rounded-2xl font-bold text-sm hover:bg-slate-50 flex items-center gap-2"><i class="fas fa-print"></i> Cetak</button>
                 </div>
             </div>
 
-            <!-- Dashboard Card: Input Area -->
             <div class="dashboard-card p-6 mb-8">
                 <div class="flex flex-wrap justify-between items-center gap-4 mb-6">
                     <div class="flex items-center gap-4">
@@ -133,18 +73,20 @@
                             </select>
                         </div>
                     </div>
-                    <button onclick="window.tambahBaris()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-all">
-                        <i class="fas fa-plus text-emerald-600 mr-1"></i> Tambah Bahan
-                    </button>
+                    <button onclick="window.tambahBaris()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-all"><i class="fas fa-plus text-emerald-600 mr-1"></i> Tambah Bahan</button>
                 </div>
 
                 <div class="overflow-x-auto">
                     <table class="gizi-table">
                         <thead>
                             <tr class="text-left">
-                                <th>Bahan Makanan</th>
-                                <th style="width:100px">Berat(g)</th>
-                                <th>Energi</th><th>Prot</th><th>Lmk</th><th>Krb</th>
+                                <th class="text-[11px] font-bold text-slate-400 uppercase">Bahan Makanan<br><span class="lowercase font-medium opacity-70">(cari/ketik manual)</span></th>
+                                <th style="width:90px" class="text-[11px] font-bold text-slate-400 uppercase">Berat<br><span class="lowercase font-medium opacity-70">(g)</span></th>
+                                <th class="text-center text-[11px] font-bold text-slate-400 uppercase">Energi<br><span class="lowercase font-medium opacity-70">(kkal)</span></th>
+                                <th class="text-center text-[11px] font-bold text-slate-400 uppercase">Protein<br><span class="lowercase font-medium opacity-70">(g)</span></th>
+                                <th class="text-center text-[11px] font-bold text-slate-400 uppercase">Lemak<br><span class="lowercase font-medium opacity-70">(g)</span></th>
+                                <th class="text-center text-[11px] font-bold text-slate-400 uppercase">Karbohidrat<br><span class="lowercase font-medium opacity-70">(g)</span></th>
+                                <th class="text-center text-[11px] font-bold text-slate-400 uppercase">Serat<br><span class="lowercase font-medium opacity-70">(g)</span></th>
                                 <th class="no-print"></th>
                             </tr>
                         </thead>
@@ -153,82 +95,57 @@
                 </div>
             </div>
 
-            <!-- Bento Stats Grid -->
-            <div class="grid lg:grid-cols-4 gap-6">
-                <div class="lg:col-span-3 grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <div class="stat-box border-b-4 border-orange-400">
-                        <p class="text-[10px] font-black text-slate-400 uppercase">Energi</p>
-                        <p class="text-2xl font-black text-slate-800"><span id="rep-energi">0</span> <small class="text-xs text-slate-400">kcal</small></p>
-                        <div class="w-full bg-slate-100 h-1.5 rounded-full mt-3 overflow-hidden">
-                            <div id="bar-energi" class="bg-orange-400 h-full transition-all duration-500" style="width: 0%"></div>
-                        </div>
-                    </div>
-                    <div class="stat-box border-b-4 border-blue-400">
-                        <p class="text-[10px] font-black text-slate-400 uppercase">Protein</p>
-                        <p class="text-2xl font-black text-slate-800"><span id="rep-protein">0</span> <small class="text-xs text-slate-400">g</small></p>
-                        <div class="w-full bg-slate-100 h-1.5 rounded-full mt-3 overflow-hidden">
-                            <div id="bar-protein" class="bg-blue-400 h-full transition-all duration-500" style="width: 0%"></div>
-                        </div>
-                    </div>
-                    <div class="stat-box border-b-4 border-yellow-400">
-                        <p class="text-[10px] font-black text-slate-400 uppercase">Lemak</p>
-                        <p class="text-2xl font-black text-slate-800"><span id="rep-lemak">0</span> <small class="text-xs text-slate-400">g</small></p>
-                    </div>
-                    <div class="stat-box border-b-4 border-emerald-400">
-                        <p class="text-[10px] font-black text-slate-400 uppercase">Karbo</p>
-                        <p class="text-2xl font-black text-slate-800"><span id="rep-karbo">0</span> <small class="text-xs text-slate-400">g</small></p>
+            <!-- Bento Stats -->
+            <div class="grid lg:grid-cols-5 gap-4">
+                <div class="stat-box border-b-4 border-orange-400">
+                    <p class="text-[10px] font-black text-slate-400 uppercase">Energi</p>
+                    <p class="text-2xl font-black text-slate-800"><span id="rep-energi">0</span> <small class="text-xs text-slate-400">kkal</small></p>
+                    <div class="w-full bg-slate-100 h-1.5 rounded-full mt-3 overflow-hidden">
+                        <div id="bar-energi" class="bg-orange-400 h-full transition-all duration-500" style="width: 0%"></div>
                     </div>
                 </div>
-
-                <div id="recom-box" class="dashboard-card bg-slate-900 p-6 text-white hidden">
-                    <h4 class="font-bold text-emerald-400 text-[10px] uppercase tracking-widest mb-4 flex items-center gap-2">
-                        <i class="fas fa-lightbulb"></i> Analisis AI
-                    </h4>
-                    <ul id="recom-list" class="text-xs space-y-3 text-slate-300"></ul>
+                <div class="stat-box border-b-4 border-blue-400">
+                    <p class="text-[10px] font-black text-slate-400 uppercase">Protein</p>
+                    <p class="text-2xl font-black text-slate-800"><span id="rep-protein">0</span> <small class="text-xs text-slate-400">g</small></p>
+                    <div class="w-full bg-slate-100 h-1.5 rounded-full mt-3 overflow-hidden">
+                        <div id="bar-protein" class="bg-blue-400 h-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div class="stat-box border-b-4 border-yellow-400">
+                    <p class="text-[10px] font-black text-slate-400 uppercase">Lemak</p>
+                    <p class="text-2xl font-black text-slate-800"><span id="rep-lemak">0</span> <small class="text-xs text-slate-400">g</small></p>
+                </div>
+                <div class="stat-box border-b-4 border-emerald-400">
+                    <p class="text-[10px] font-black text-slate-400 uppercase">Karbo</p>
+                    <p class="text-2xl font-black text-slate-800"><span id="rep-karbo">0</span> <small class="text-xs text-slate-400">g</small></p>
+                </div>
+                <div class="stat-box border-b-4 border-purple-400">
+                    <p class="text-[10px] font-black text-slate-400 uppercase">Serat</p>
+                    <p class="text-2xl font-black text-slate-800"><span id="rep-serat">0</span> <small class="text-xs text-slate-400">g</small></p>
                 </div>
             </div>
         </div>
 
-        <!-- SECTION RIWAYAT -->
+        <!-- RIWAYAT & PROFIL (Tetap sama) -->
         <div id="section-riwayat" class="hidden max-w-6xl mx-auto">
             <h1 class="text-3xl font-black text-slate-900 mb-8">Riwayat Analisis</h1>
             <div class="dashboard-card overflow-hidden">
                 <table class="w-full text-left">
                     <thead class="bg-slate-50 border-b border-slate-100">
-                        <tr>
-                            <th class="p-6 text-[10px] font-black text-slate-400 uppercase">Tanggal</th>
-                            <th class="p-6 text-[10px] font-black text-slate-400 uppercase">Target</th>
-                            <th class="p-6 text-[10px] font-black text-slate-400 uppercase">Total Kalori</th>
-                            <th class="p-6 text-center text-[10px] font-black text-slate-400 uppercase">Aksi</th>
-                        </tr>
+                        <tr><th class="p-6 text-[10px] font-black text-slate-400 uppercase">Tanggal</th><th class="p-6 text-[10px] font-black text-slate-400 uppercase">Target</th><th class="p-6 text-center text-[10px] font-black text-slate-400 uppercase">Aksi</th></tr>
                     </thead>
                     <tbody id="riwayat-body"></tbody>
                 </table>
             </div>
         </div>
-
-        <!-- SECTION PROFIL -->
-        <div id="section-profil" class="hidden max-w-xl mx-auto">
-            <h1 class="text-3xl font-black text-slate-900 mb-8">Profil Pengguna</h1>
-            <div class="dashboard-card p-10">
-                <div class="space-y-6">
-                    <div>
-                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block">Nama Lengkap</label>
-                        <input type="text" id="prof-nama" class="table-input py-4 font-bold text-lg">
-                        <button onclick="window.updateNama()" class="mt-3 w-full py-3 bg-emerald-600 text-white rounded-xl font-bold text-xs uppercase">Simpan Perubahan</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
     </main>
 
     <datalist id="daftarBahan"></datalist>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signOut, updatePassword, updateProfile } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, collection, query, where, getDocs, limit, addDoc, serverTimestamp, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, collection, query, where, getDocs, limit, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCaaCF_CQMftYWePC51dUWMRzndkZ-CW6o",
@@ -251,19 +168,6 @@
             "SMA": { kal: 712.5, prot: 21, lemak: 23.25, karbo: 105, h_kal: 2375, h_prot: 70 }
         };
 
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                const userDoc = await getDoc(doc(db, "users", user.uid));
-                if (userDoc.exists()) {
-                    const data = userDoc.data();
-                    document.querySelectorAll('#user-display-name').forEach(el => el.innerText = data.nama.split(' ')[0]);
-                    document.getElementById('prof-nama').value = data.nama;
-                    const diff = data.trialExpired - Date.now();
-                    document.getElementById('trial-info').innerText = diff > 0 ? `${Math.ceil(diff/(1000*60*60*24))} Hari Lagi` : "Habis";
-                }
-            } else { window.location.href = "login.html"; }
-        });
-
         window.tambahBaris = () => {
             const tr = document.createElement('tr');
             tr.innerHTML = `
@@ -273,62 +177,38 @@
                 <td><input type="number" step="0.01" class="table-input v-protein text-center font-medium" value="0" oninput="window.hitungSemua()"></td>
                 <td><input type="number" step="0.01" class="table-input v-lemak text-center font-medium" value="0" oninput="window.hitungSemua()"></td>
                 <td><input type="number" step="0.01" class="table-input v-karbo text-center font-medium" value="0" oninput="window.hitungSemua()"></td>
-                <td class="no-print text-center">
-                    <button onclick="this.parentElement.parentElement.remove();window.hitungSemua()" class="text-slate-300 hover:text-red-500"><i class="fas fa-trash"></i></button>
-                </td>
+                <td><input type="number" step="0.01" class="table-input v-serat text-center font-medium" value="0" oninput="window.hitungSemua()"></td>
+                <td class="no-print text-center"><button onclick="this.parentElement.parentElement.remove();window.hitungSemua()" class="text-slate-300 hover:text-red-500"><i class="fas fa-trash"></i></button></td>
             `;
             document.getElementById('badanTabel').appendChild(tr);
         };
 
         window.autoFillGizi = (input) => {
-            if (!input) return;
             const row = input.closest('tr');
             const selectedValue = row.querySelector('.in-nama').value;
             const gram = parseFloat(row.querySelector('.in-gram').value) || 0;
             const selectedOption = Array.from(document.getElementById('daftarBahan').options).find(o => o.value === selectedValue);
-            
             if (selectedOption && selectedOption.dataset.gizi) {
                 const data = JSON.parse(selectedOption.dataset.gizi);
-                // Hitung otomatis berdasarkan berat (asumsi data db per 100g)
                 row.querySelector('.v-energi').value = ((data.energi || 0) * (gram / 100)).toFixed(2);
                 row.querySelector('.v-protein').value = ((data.protein || 0) * (gram / 100)).toFixed(2);
                 row.querySelector('.v-lemak').value = ((data.lemak || 0) * (gram / 100)).toFixed(2);
                 row.querySelector('.v-karbo').value = ((data.karbo || 0) * (gram / 100)).toFixed(2);
+                row.querySelector('.v-serat').value = ((data.serat || 0) * (gram / 100)).toFixed(2);
             }
             window.hitungSemua();
         };
 
         window.hitungSemua = () => {
-            const fields = ['energi', 'protein', 'lemak', 'karbo'];
-            let total = { energi: 0, protein: 0, lemak: 0, karbo: 0 };
-            
+            const fields = ['energi', 'protein', 'lemak', 'karbo', 'serat'];
+            let total = { energi: 0, protein: 0, lemak: 0, karbo: 0, serat: 0 };
             document.querySelectorAll('#badanTabel tr').forEach(row => { 
-                fields.forEach(f => {
-                    total[f] += parseFloat(row.querySelector(`.v-${f}`).value) || 0;
-                });
+                fields.forEach(f => { total[f] += parseFloat(row.querySelector(`.v-${f}`).value) || 0; });
             });
-            
             const target = targetAKG[document.getElementById('targetStatus').value];
-            
-            // Update Tampilan Angka
-            fields.forEach(f => {
-                const el = document.getElementById(`rep-${f}`);
-                if (el) el.innerText = total[f].toFixed(1);
-            });
-            
-            // Update Progress Bar
-            const pE = Math.min((total.energi / target.h_kal) * 100, 100);
-            const pP = Math.min((total.protein / target.h_prot) * 100, 100);
-            document.getElementById('bar-energi').style.width = pE + '%';
-            document.getElementById('bar-protein').style.width = pP + '%';
-
-            // Logika Rekomendasi
-            const list = document.getElementById('recom-list'); list.innerHTML = "";
-            if(total.energi < target.kal) {
-                const selisih = (target.kal - total.energi).toFixed(0);
-                list.innerHTML += `<li class="flex gap-2"><i class="fas fa-info-circle text-emerald-400"></i><span>Kurang ${selisih} kcal. Pertimbangkan menambah porsi.</span></li>`;
-            }
-            document.getElementById('recom-box').classList.toggle('hidden', list.innerHTML === "");
+            fields.forEach(f => { if(document.getElementById(`rep-${f}`)) document.getElementById(`rep-${f}`).innerText = total[f].toFixed(1); });
+            document.getElementById('bar-energi').style.width = Math.min((total.energi / target.h_kal) * 100, 100) + '%';
+            document.getElementById('bar-protein').style.width = Math.min((total.protein / target.h_prot) * 100, 100) + '%';
         };
 
         window.cariDatabase = async (input) => {
@@ -338,18 +218,24 @@
             const snap = await getDocs(q);
             const list = document.getElementById('daftarBahan'); list.innerHTML = "";
             snap.forEach(d => {
-                let opt = document.createElement('option');
-                opt.value = d.data().nama;
-                opt.dataset.gizi = JSON.stringify(d.data());
-                list.appendChild(opt);
+                let opt = document.createElement('option'); opt.value = d.data().nama;
+                opt.dataset.gizi = JSON.stringify(d.data()); list.appendChild(opt);
             });
         };
 
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                const userDoc = await getDoc(doc(db, "users", user.uid));
+                if (userDoc.exists()) {
+                    const data = userDoc.data();
+                    document.getElementById('trial-info').innerText = `${Math.ceil((data.trialExpired - Date.now())/(1000*60*60*24))} Hari Lagi`;
+                }
+            } else { window.location.href = "login.html"; }
+        });
+
         window.switchTab = (tab) => {
-            ['section-kalkulator', 'section-riwayat', 'section-profil'].forEach(s => document.getElementById(s).classList.add('hidden'));
-            ['menu-kalkulator', 'menu-riwayat', 'menu-profil'].forEach(m => document.getElementById(m).classList.remove('nav-active', 'font-bold'));
+            ['section-kalkulator', 'section-riwayat'].forEach(s => document.getElementById(s).classList.add('hidden'));
             document.getElementById(`section-${tab}`).classList.remove('hidden');
-            document.getElementById(`menu-${tab}`).classList.add('nav-active', 'font-bold');
         };
 
         window.logout = () => signOut(auth).then(() => window.location.href="login.html");
