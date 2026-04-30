@@ -9,28 +9,77 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+        
+        /* Layout Sidebar & Sidebar Active State */
         .nav-active { background: #ecfdf5; color: #059669; border-right: 4px solid #10b981; }
-        .dashboard-card { background: white; border-radius: 24px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border: 1px solid rgba(226, 232, 240, 0.8); }
+        
+        /* Card Styling */
+        .dashboard-card { 
+            background: white; 
+            border-radius: 24px; 
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+
+        /* Modern Table - Floating Rows */
         .gizi-table { width: 100%; border-spacing: 0 8px; border-collapse: separate; }
-        .gizi-table th { padding: 12px 16px; font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.1em; }
-        .gizi-table td { padding: 12px 16px; background: white; border-top: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9; }
+        .gizi-table th { 
+            padding: 12px 16px; 
+            font-size: 11px; 
+            font-weight: 700; 
+            color: #64748b; 
+            text-transform: uppercase; 
+            letter-spacing: 0.1em;
+        }
+        .gizi-table td { 
+            padding: 12px 16px; 
+            background: white;
+            border-top: 1px solid #f1f5f9;
+            border-bottom: 1px solid #f1f5f9;
+        }
         .gizi-table td:first-child { border-left: 1px solid #f1f5f9; border-radius: 12px 0 0 12px; }
         .gizi-table td:last-child { border-right: 1px solid #f1f5f9; border-radius: 0 12px 12px 0; }
-        .table-input { width: 100%; background: #f8fafc; border: 1px solid #e2e8f0; padding: 8px 12px; border-radius: 10px; font-size: 13px; transition: all 0.2s; }
-        .table-input:focus { background: white; border-color: #10b981; box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1); outline: none; }
-        .stat-box { padding: 20px; border-radius: 20px; background: white; border: 1px solid #e2e8f0; transition: transform 0.2s; }
+
+        /* Modern Input Fields */
+        .table-input {
+            width: 100%;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 8px 12px;
+            border-radius: 10px;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+        .table-input:focus {
+            background: white;
+            border-color: #10b981;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+            outline: none;
+        }
+
+        /* Bento Stats Card */
+        .stat-box {
+            padding: 20px;
+            border-radius: 20px;
+            background: white;
+            border: 1px solid #e2e8f0;
+            transition: transform 0.2s;
+        }
+
         .hidden { display: none; }
         .pass-container { position: relative; }
         .pass-icon { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #94a3b8; }
+        
         @media print { .no-print { display: none !important; } }
     </style>
 </head>
 <body class="flex min-h-screen text-slate-800">
 
+    <!-- SIDEBAR NAVIGATION -->
     <aside class="w-64 bg-white border-r border-slate-200 hidden md:flex flex-col z-20 no-print">
         <div class="p-8 flex items-center gap-3">
-            <div class="bg-emerald-600 p-2 rounded-xl">
-                <svg width="24" height="24" viewBox="0 0 40 40" fill="none"><path d="M20 10V30M10 20H30" stroke="white" stroke-width="4" stroke-linecap="round"/></svg>
+            <div class="bg-emerald-600 p-2 rounded-xl text-white">
+                <i class="fas fa-leaf text-xl"></i>
             </div>
             <span class="text-xl font-extrabold text-slate-800 tracking-tighter">NutriCalc</span>
         </div>
@@ -46,6 +95,8 @@
     </aside>
 
     <main class="flex-grow p-6 md:p-10 overflow-y-auto">
+        
+        <!-- SECTION KALKULATOR -->
         <div id="section-kalkulator" class="max-w-6xl mx-auto">
             <div class="flex flex-col md:flex-row justify-between items-end mb-8 gap-4">
                 <div>
@@ -56,11 +107,16 @@
                     </div>
                 </div>
                 <div class="flex gap-3 no-print">
-                    <button onclick="window.saveHistory()" class="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl font-bold text-sm shadow-lg shadow-emerald-100 flex items-center gap-2 transition-all"><i class="fas fa-save"></i> Simpan</button>
-                    <button onclick="window.print()" class="px-6 py-3 bg-white border border-slate-200 text-slate-700 rounded-2xl font-bold text-sm hover:bg-slate-50 flex items-center gap-2"><i class="fas fa-print"></i> Cetak</button>
+                    <button onclick="window.saveHistory()" class="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl font-bold text-sm shadow-lg shadow-emerald-100 flex items-center gap-2 transition-all">
+                        <i class="fas fa-save"></i> Simpan
+                    </button>
+                    <button onclick="window.print()" class="px-6 py-3 bg-white border border-slate-200 text-slate-700 rounded-2xl font-bold text-sm hover:bg-slate-50 flex items-center gap-2">
+                        <i class="fas fa-print"></i> Cetak
+                    </button>
                 </div>
             </div>
 
+            <!-- Dashboard Card: Input Area -->
             <div class="dashboard-card p-6 mb-8">
                 <div class="flex flex-wrap justify-between items-center gap-4 mb-6">
                     <div class="flex items-center gap-4">
@@ -77,7 +133,9 @@
                             </select>
                         </div>
                     </div>
-                    <button onclick="window.tambahBaris()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-all"><i class="fas fa-plus text-emerald-600 mr-1"></i> Tambah Bahan</button>
+                    <button onclick="window.tambahBaris()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-all">
+                        <i class="fas fa-plus text-emerald-600 mr-1"></i> Tambah Bahan
+                    </button>
                 </div>
 
                 <div class="overflow-x-auto">
@@ -95,6 +153,7 @@
                 </div>
             </div>
 
+            <!-- Bento Stats Grid -->
             <div class="grid lg:grid-cols-4 gap-6">
                 <div class="lg:col-span-3 grid grid-cols-2 md:grid-cols-4 gap-4">
                     <div class="stat-box border-b-4 border-orange-400">
@@ -120,13 +179,17 @@
                         <p class="text-2xl font-black text-slate-800"><span id="rep-karbo">0</span> <small class="text-xs text-slate-400">g</small></p>
                     </div>
                 </div>
+
                 <div id="recom-box" class="dashboard-card bg-slate-900 p-6 text-white hidden">
-                    <h4 class="font-bold text-emerald-400 text-[10px] uppercase tracking-widest mb-4 flex items-center gap-2"><i class="fas fa-lightbulb"></i> Analisis AI</h4>
+                    <h4 class="font-bold text-emerald-400 text-[10px] uppercase tracking-widest mb-4 flex items-center gap-2">
+                        <i class="fas fa-lightbulb"></i> Analisis AI
+                    </h4>
                     <ul id="recom-list" class="text-xs space-y-3 text-slate-300"></ul>
                 </div>
             </div>
         </div>
 
+        <!-- SECTION RIWAYAT -->
         <div id="section-riwayat" class="hidden max-w-6xl mx-auto">
             <h1 class="text-3xl font-black text-slate-900 mb-8">Riwayat Analisis</h1>
             <div class="dashboard-card overflow-hidden">
@@ -144,18 +207,20 @@
             </div>
         </div>
 
+        <!-- SECTION PROFIL -->
         <div id="section-profil" class="hidden max-w-xl mx-auto">
-            <h1 class="text-3xl font-black text-slate-900 mb-8">Pengaturan Akun</h1>
+            <h1 class="text-3xl font-black text-slate-900 mb-8">Profil Pengguna</h1>
             <div class="dashboard-card p-10">
                 <div class="space-y-6">
                     <div>
-                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block">Nama Pengguna</label>
+                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block">Nama Lengkap</label>
                         <input type="text" id="prof-nama" class="table-input py-4 font-bold text-lg">
-                        <button onclick="window.updateNama()" class="mt-3 w-full py-3 bg-emerald-600 text-white rounded-xl font-bold text-xs uppercase">Update Nama</button>
+                        <button onclick="window.updateNama()" class="mt-3 w-full py-3 bg-emerald-600 text-white rounded-xl font-bold text-xs uppercase">Simpan Perubahan</button>
                     </div>
                 </div>
             </div>
         </div>
+
     </main>
 
     <datalist id="daftarBahan"></datalist>
@@ -202,13 +267,15 @@
         window.tambahBaris = () => {
             const tr = document.createElement('tr');
             tr.innerHTML = `
-                <td><input type="text" list="daftarBahan" oninput="window.cariDatabase(this); window.autoFillGizi(this)" class="table-input in-nama font-bold text-slate-700" placeholder="Cari..."></td>
+                <td><input type="text" list="daftarBahan" oninput="window.cariDatabase(this); window.autoFillGizi(this)" class="table-input in-nama font-bold text-slate-700" placeholder="Ketik bahan..."></td>
                 <td><input type="number" class="table-input in-gram font-bold" value="0" oninput="window.autoFillGizi(this.closest('tr').querySelector('.in-nama'))"></td>
-                <td><input type="number" class="table-input v-energi bg-transparent border-none text-center" value="0" readonly></td>
-                <td><input type="number" class="table-input v-protein bg-transparent border-none text-center" value="0" readonly></td>
-                <td><input type="number" class="table-input v-lemak bg-transparent border-none text-center" value="0" readonly></td>
-                <td><input type="number" class="table-input v-karbo bg-transparent border-none text-center" value="0" readonly></td>
-                <td class="no-print text-center"><button onclick="this.parentElement.parentElement.remove();window.hitungSemua()" class="text-slate-300 hover:text-red-500"><i class="fas fa-trash"></i></button></td>
+                <td><input type="number" step="0.01" class="table-input v-energi text-center font-medium" value="0" oninput="window.hitungSemua()"></td>
+                <td><input type="number" step="0.01" class="table-input v-protein text-center font-medium" value="0" oninput="window.hitungSemua()"></td>
+                <td><input type="number" step="0.01" class="table-input v-lemak text-center font-medium" value="0" oninput="window.hitungSemua()"></td>
+                <td><input type="number" step="0.01" class="table-input v-karbo text-center font-medium" value="0" oninput="window.hitungSemua()"></td>
+                <td class="no-print text-center">
+                    <button onclick="this.parentElement.parentElement.remove();window.hitungSemua()" class="text-slate-300 hover:text-red-500"><i class="fas fa-trash"></i></button>
+                </td>
             `;
             document.getElementById('badanTabel').appendChild(tr);
         };
@@ -218,19 +285,17 @@
             const row = input.closest('tr');
             const selectedValue = row.querySelector('.in-nama').value;
             const gram = parseFloat(row.querySelector('.in-gram').value) || 0;
-            
             const selectedOption = Array.from(document.getElementById('daftarBahan').options).find(o => o.value === selectedValue);
             
             if (selectedOption && selectedOption.dataset.gizi) {
                 const data = JSON.parse(selectedOption.dataset.gizi);
-                // Hitung nilai gizi berdasarkan berat per 100g (sesuai standar Tabel Komposisi Pangan)
-                // Jika database kamu menyimpan per 1g, hilangkan pembagi /100
+                // Hitung otomatis berdasarkan berat (asumsi data db per 100g)
                 row.querySelector('.v-energi').value = ((data.energi || 0) * (gram / 100)).toFixed(2);
                 row.querySelector('.v-protein').value = ((data.protein || 0) * (gram / 100)).toFixed(2);
                 row.querySelector('.v-lemak').value = ((data.lemak || 0) * (gram / 100)).toFixed(2);
                 row.querySelector('.v-karbo').value = ((data.karbo || 0) * (gram / 100)).toFixed(2);
-                window.hitungSemua();
             }
+            window.hitungSemua();
         };
 
         window.hitungSemua = () => {
@@ -243,23 +308,25 @@
                 });
             });
             
-            const targetKey = document.getElementById('targetStatus').value;
-            const target = targetAKG[targetKey];
+            const target = targetAKG[document.getElementById('targetStatus').value];
             
+            // Update Tampilan Angka
             fields.forEach(f => {
                 const el = document.getElementById(`rep-${f}`);
                 if (el) el.innerText = total[f].toFixed(1);
             });
             
+            // Update Progress Bar
             const pE = Math.min((total.energi / target.h_kal) * 100, 100);
             const pP = Math.min((total.protein / target.h_prot) * 100, 100);
             document.getElementById('bar-energi').style.width = pE + '%';
             document.getElementById('bar-protein').style.width = pP + '%';
 
+            // Logika Rekomendasi
             const list = document.getElementById('recom-list'); list.innerHTML = "";
             if(total.energi < target.kal) {
-                const kurang = (target.kal - total.energi).toFixed(0);
-                list.innerHTML += `<li class="flex gap-2"><i class="fas fa-info-circle text-emerald-400"></i><span>Kurang ${kurang} kcal. Coba tambah porsi karbohidrat.</span></li>`;
+                const selisih = (target.kal - total.energi).toFixed(0);
+                list.innerHTML += `<li class="flex gap-2"><i class="fas fa-info-circle text-emerald-400"></i><span>Kurang ${selisih} kcal. Pertimbangkan menambah porsi.</span></li>`;
             }
             document.getElementById('recom-box').classList.toggle('hidden', list.innerHTML === "");
         };
